@@ -29,7 +29,6 @@ CAPSTONE — ${work.title} (${work.kicker})
 ${work.description}
 ${work.context}
 Role: ${work.role}
-Results: ${work.metrics.map((metric) => `${metric.value}${metric.suffix} ${metric.label}`).join("; ")}
 Stack: ${work.stack.join(", ")}
 
 CERTIFICATIONS
@@ -91,7 +90,7 @@ export function fallbackAnswer(question: string): Reply {
 
   if (/track|capstone|project|ride|iot|esp32/.test(q)) {
     return {
-      text: `Track My Ride is his 2025 capstone for IPUTC — an IoT city-bus tracking system built on ESP32, GPS, and RFID, with a web dashboard. It scored 4.88/5.00 from IT experts and 5.00/5.00 from end users under ISO/IEC 25010.`,
+      text: `Track My Ride is his 2025 capstone for Isabela State University — a transit monitoring web application with a small hardware layer. The system itself is not publicly shown.`,
       section: "#work",
     };
   }

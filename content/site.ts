@@ -8,9 +8,10 @@ export const profile = {
   location: "City of Ilagan, Isabela",
   email: "emjaywarrencampano@gmail.com",
   availability: "Open to IT support, systems, and development roles",
-  headline: "IT Specialist who builds systems end-to-end — from ESP32 hardware to the web app that monitors it.",
+  headline:
+    "IT Specialist working across hardware, Windows systems, networks, and the small tools that make them easier to use.",
   intro:
-    "Network and Security specialist based in Ilagan, Isabela. I work the whole stack: hardware diagnostics, firmware, servers, and the interfaces people actually use.",
+    "Network and Security specialist based in Ilagan, Isabela. I diagnose and fix machines, set up systems, and build simple web tools when the existing ones do not fit.",
   links: {
     linkedin: "", // add your profile URL
     github: "", // add your profile URL
@@ -23,28 +24,17 @@ export const profile = {
 } as const;
 
 export const work = {
-  kicker: "Capstone · IPUTC 2025",
+  kicker: "Capstone · 2025",
   title: "Track My Ride",
   titleAccent: "Ride",
   description:
-    "An intelligent city bus tracking and transit management system, developed for the 2025 IPUTC capstone. ESP32 units on vehicles, GPS and RFID at the edge, a central web application for real-time monitoring.",
-  context:
-    "Built for Isabela State University as an academic capstone in partnership with IPUTC. Presented as an engineering case study — the system itself is not shown here.",
+    "An academic capstone project for a city bus tracking and transit management system: a web application for monitoring vehicles in real time, with a small hardware layer feeding it.",
+  context: "Capstone for Isabela State University, 2025. The system itself is not publicly shown.",
   role: "Full-stack developer",
-  highlights: [
-    "Designed and built the full system — hardware, firmware, and web application.",
-    "ESP32 firmware in C++ via Arduino IDE, linked to a live web dashboard.",
-    "Evaluated against ISO/IEC 25010 with IT experts and end users.",
-    "4G LTE link keeping vehicles and server in continuous sync.",
-  ],
-  stack: ["ESP32", "C++", "Arduino", "GPS", "RFID", "4G LTE", "Web App"],
-  metrics: [
-    { value: "4.88", suffix: "/5", label: "Mean score from IT experts" },
-    { value: "5.00", suffix: "/5", label: "Score from end users" },
-    { value: "ISO", suffix: "25010", label: "Evaluated against the standard" },
-    { value: "3", suffix: "layers", label: "Hardware, firmware, and web" },
-  ],
+  note: "Full details are in the resume.",
+  stack: ["Web App", "Database"],
 } as const;
+
 
 export type Certificate = {
   slug: string;
@@ -141,19 +131,22 @@ export const experience: ExperienceEntry[] = [
 ];
 
 export const about = {
-  lead: "I like problems that start at the hardware and end at the browser.",
+  lead: "I fix machines, set up systems, and build the small tools that make work easier.",
   paragraphs: [
-    "That is the shape of my capstone — sensors on a bus, firmware reading them, a server holding the data, and a dashboard making it usable. I built every layer, then measured whether it actually worked.",
-    "Outside of that I repair devices, set up systems, and keep learning the security side of networks. The goal is simple: technology that behaves predictably, for the people who depend on it.",
+    "Most of my day is practical: diagnosing hardware, setting up Windows, tracing a network problem, or writing a script or web tool when an existing one does not fit.",
+    "I am finishing a degree in Information Technology with a Network and Security track, and I keep learning by building things — including the occasional experiment.",
   ],
   skills: [
-    { group: "Hardware", items: ["Component diagnostics", "Board-level repair", "ESP32", "Sensors & RFID"] },
+    { group: "Languages", items: ["Python", "C++", "JavaScript / TypeScript", "HTML / CSS", "SQL"] },
+    { group: "Tools", items: ["VS Code", "Arduino IDE", "Git & GitHub", "Windows", "AI coding tools"] },
+    { group: "Hardware", items: ["Component diagnostics", "Laptop & phone repair", "Arduino", "Device setup"] },
     { group: "Systems", items: ["Windows setup & management", "Device provisioning", "Troubleshooting"] },
-    { group: "Network", items: ["Basic network configuration", "4G LTE links", "Network security"] },
-    { group: "Development", items: ["C++ / Arduino", "Web-based systems", "Hardware ↔ web integration"] },
-    { group: "Data", items: ["Database management", "Records & privacy"] },
+    { group: "Network", items: ["Network configuration", "Network security", "Connectivity testing"] },
+    { group: "Data & Records", items: ["Database management", "Records & privacy", "Data encoding"] },
+    { group: "Exploring", items: ["Rust (learning)", "Three.js", "Next.js"] },
   ],
 } as const;
+
 
 export const contact = {
   titleStart: "Let’s build something",

@@ -1,14 +1,20 @@
 import { about } from "@/content/site";
+import { MarkFor } from "./SkillMarks";
 import styles from "./About.module.css";
 
+const PRIMARY_GROUPS = new Set(["Languages", "Tools"]);
+
 export function About() {
+  const primary = about.skills.filter((group) => PRIMARY_GROUPS.has(group.group));
+  const rest = about.skills.filter((group) => !PRIMARY_GROUPS.has(group.group));
+
   return (
     <section id="about" className={styles.section}>
       <div className={`wrap ${styles.grid}`}>
         <div data-reveal>
           <span className={`mono ${styles.num}`}>04</span>
           <p className={styles.lead}>
-            I like problems that start at the <em>hardware</em> and end at the <em>browser</em>.
+            I fix machines, set up systems, and build the small tools that make work <em>easier</em>.
           </p>
           {about.paragraphs.map((paragraph) => (
             <p key={paragraph} className={styles.paragraph}>
@@ -22,8 +28,26 @@ export function About() {
         </div>
 
         <div data-reveal>
+          <div className={styles.primary}>
+            {primary.map((group) => (
+              <div key={group.group} className={styles.primaryGroup}>
+                <p className={`mono ${styles.groupLabel}`}>{group.group}</p>
+                <ul className={styles.tiles}>
+                  {group.items.map((item) => (
+                    <li key={item} className={styles.tile}>
+                      <span className={styles.tileIcon} aria-hidden="true">
+                        <MarkFor name={item} className={styles.mark} />
+                      </span>
+                      <span className={styles.tileName}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
           <dl className={styles.skills}>
-            {about.skills.map((group) => (
+            {rest.map((group) => (
               <div key={group.group} className={styles.group}>
                 <dt className={`mono ${styles.groupLabel}`}>{group.group}</dt>
                 <dd className={styles.items}>

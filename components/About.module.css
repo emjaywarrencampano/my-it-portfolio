@@ -50,40 +50,106 @@
   background: var(--line-strong);
 }
 
-.skills {
+/* ---------- languages & tools ---------- */
+.primary {
   display: grid;
-  gap: 0;
-  border-top: 1px solid var(--line);
-  margin: 0;
+  gap: 26px;
 }
 
-.group {
-  padding-block: 22px;
-  border-bottom: 1px solid var(--line);
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 20px;
-  align-items: start;
+.primaryGroup {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
 }
 
 .groupLabel {
   color: var(--muted);
+  margin: 0 0 14px;
+}
+
+.tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: 8px;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  transition: border-color 0.3s var(--ease), transform 0.35s var(--ease);
+}
+
+.tile:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.tileIcon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.mark {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.tileName {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+/* ---------- capabilities ---------- */
+.skills {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  margin: 26px 0 0;
+}
+
+.group {
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.group .groupLabel {
   padding-top: 3px;
+  margin: 0;
 }
 
 .items {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 6px;
   margin: 0;
 }
 
 .chip {
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 5px 10px;
+  padding: 5px 9px;
   border-radius: 6px;
   background: var(--card);
   border: 1px solid var(--line);
@@ -98,5 +164,9 @@
   .group {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+
+  .tiles {
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
   }
 }
