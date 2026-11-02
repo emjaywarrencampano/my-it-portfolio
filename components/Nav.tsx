@@ -47,9 +47,9 @@ export function Nav({ onOpenChat }: { onOpenChat: () => void }) {
 
         <div className={styles.right}>
           <ThemeToggle />
-          <button type="button" className={styles.talk} onClick={onOpenChat} aria-label="Open the AI assistant">
+          <button type="button" className={styles.talk} onClick={onOpenChat} aria-label="Open assistant">
             <span className={styles.dot} aria-hidden="true" />
-            <span className={styles.talkLabel}>Ask AI</span>
+            <span className={styles.talkLabel}>Ask Assistant</span>
             <svg className={styles.talkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
               <path
                 d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.7-.8L3 21l1.9-5.3a8.4 8.4 0 0 1-.9-3.7 8.4 8.4 0 0 1 8.5-8.4 8.4 8.4 0 0 1 8.5 8.4Z"

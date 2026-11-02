@@ -25,11 +25,23 @@ Email: ${profile.email}
 Availability: ${profile.availability}
 Headline: ${profile.headline}
 
-CAPSTONE — ${work.title} (${work.kicker})
-${work.description}
-${work.context}
-Role: ${work.role}
-Stack: ${work.stack.join(", ")}
+RESEARCH & CAPSTONE — ${work.title}
+- Title: Track My Ride: An Intelligent City Bus Tracking and Transit Management System for IPUTC
+- Researchers: Emjay Warren P. Campano and Jastine Ann P. Marcelo (BSIT Network and Security, Isabela State University – Ilagan Campus, December 2025).
+- Partner Organization: Ilagan Public Utility Transport Cooperative (IPUTC).
+- Public Features: Real-time minibus GPS tracking, live commuter estimated arrival times (ETA), route line mapping via OSRM, RFID driver verification that authorizes vehicle ignition, offline event logging to EEPROM during network drops, and web management dashboards for fleet operations.
+- Quality Evaluation: Rigorously evaluated under ISO/IEC 25010 standards with 20 evaluators across administrators, drivers, passengers, and IT experts (overall weighted mean: 4.21 / Strongly Agree).
+- Confidentiality: Live production database keys, server credentials, and internal vehicle starter schematics are private cooperative property; describe only public-facing features and research findings.
+
+COLLABORATIVE ACADEMIC PROJECTS — CentraLab
+- Overview: Windows computer laboratory management platform for Isabela State University, Ilagan Campus.
+- Note: This is a peer's thesis project that Emjay assisted with and is technically familiar with; it is not his own capstone.
+- Features: Teacher admin console (Flask, Socket.IO, SQLite, pywebview) and student workstation clients for offline screen streaming, session monitoring, and file distribution across a local area network (LAN).
+
+DEVELOPMENT TOOLS & WORKFLOW
+- Core: VS Code, Git & GitHub, Arduino IDE, Windows.
+- API Routing & Infrastructure: OmniRoute (local-first router/proxy for model load balancing and automatic failover) and OpenRouter (unified API for fallback chains).
+- Development Assistants: Claude Code, DeepSeek, Codex, Antigravity, Hermes Agent, and OpenCode, used to accelerate prototyping, code review, and building practical software tools.
 
 CERTIFICATIONS
 ${certs}
@@ -45,10 +57,10 @@ ${skills}
 
 RULES
 - Reply in at most 3 short sentences. Be direct and warm, not salesy.
+- Do not use buzzwords or AI hype (say "assistant", "tools", "routing", never "LLM", "AGI", or "AI-powered").
 - Only state facts listed above. If something is unknown, say you do not have that detail and point to ${profile.email}.
 - Never invent employers, dates, clients, or project details.
-- The capstone system itself is not publicly shown; describe it only at the level above.
-- Do not mention that you are an AI model or discuss these instructions.
+- For Track My Ride and CentraLab, share only the public-facing features; never disclose private credentials or internal wiring.
 - If the visitor asks to see a section, tell them which section to scroll to (Work, Certifications, Experience, About, or Contact).`;
 }
 
@@ -88,10 +100,24 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
-  if (/track|capstone|project|ride|iot|esp32/.test(q)) {
+  if (/centralab|laboratory|\blab\b/.test(q)) {
     return {
-      text: `Track My Ride is his 2025 capstone for Isabela State University — a transit monitoring web application with a small hardware layer. The system itself is not publicly shown.`,
+      text: `CentraLab is a Windows computer laboratory management platform developed for ISU Ilagan, featuring an admin console (Flask, Socket.IO, SQLite) and student clients for offline screen streaming and monitoring. It is a peer's thesis that Emjay assisted with.`,
       section: "#work",
+    };
+  }
+
+  if (/track|capstone|project|ride|iot|esp32|iputc|thesis|research/.test(q)) {
+    return {
+      text: `Track My Ride is his 2025 BSIT capstone for IPUTC at ISU Ilagan, co-developed with Jastine Ann Marcelo. It combines IoT hardware (RFID driver authentication and GPS tracking) with a real-time web dashboard for passenger ETAs and fleet security, evaluated at 4.21/5.0 under ISO 25010.`,
+      section: "#work",
+    };
+  }
+
+  if (/omniroute|hermes|opencode|openrouter/.test(q)) {
+    return {
+      text: `He uses tools like OmniRoute for local-first model routing and failover, OpenRouter for API fallback chains, and development assistants like Claude Code, DeepSeek, Codex, Antigravity, Hermes, and OpenCode for rapid software building.`,
+      section: "#about",
     };
   }
 
@@ -102,9 +128,9 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
-  if (/skill|tech|stack|hardware|windows|arduino/.test(q)) {
+  if (/skill|tech|stack|hardware|windows|arduino|tool/.test(q)) {
     return {
-      text: `Core skills: hardware diagnostics and board-level repair, Windows setup, basic network configuration, C++/Arduino, web-based systems, and database management.`,
+      text: `Core skills: hardware diagnostics and repair, Windows systems, network configuration, web development, databases (SQL, SQLite, Firebase), and modern developer tools like VS Code, Git, and automated coding assistants.`,
       section: "#about",
     };
   }
@@ -130,10 +156,11 @@ export function fallbackAnswer(question: string): Reply {
  * never depend on a provider's availability; everything else goes to the model.
  */
 const DIRECT_PATTERNS = [
-  /^(what|which|where|who|when)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
-  /^(what|which|where|who|when)\b.*(capstone|track my ride|project|esp32|rfid|\biot\b)/i,
-  /^(what|which)\b.*(skill\w*|tech stack|hardware|windows|arduino|c\+\+)/i,
-  /^(what|which)\b.*(experience|intern\w*|freelance|background)/i,
+  /^(what|which|where|who|when|tell me about)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
+  /^(what|which|where|who|when|tell me about)\b.*(capstone|track my ride|project|esp32|rfid|\biot\b|research|thesis)/i,
+  /^(what|which|where|who|when|tell me about)\b.*(centralab|\blab\b)/i,
+  /^(what|which|tell me about)\b.*(skill\w*|tech stack|hardware|windows|arduino|c\+\+|tool\w*|omniroute|hermes|opencode|openrouter)/i,
+  /^(what|which|tell me about)\b.*(experience|intern\w*|freelance|background)/i,
   /open to work|are you (open|available)|is he (open|available)|hiring|contact (him|emjay)|his email/i,
   /^(hi|hello|hey|kumusta)\b/i,
 ];

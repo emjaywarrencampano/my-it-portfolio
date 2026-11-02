@@ -26,6 +26,11 @@ const LOGOS: Record<string, Logo> = {
   Codex: { file: "openai", color: "#10A37F" },
   "Claude Code": { file: "claude", color: "#D97757" },
   Antigravity: { file: "google", color: "#4285F4" },
+  OmniRoute: { file: "omniroute", color: "#E54D5E" },
+  "Omni Route": { file: "omniroute", color: "#E54D5E" },
+  Hermes: { file: "hermes", color: "#8B5CF6" },
+  OpenCode: { file: "opencode", color: "#10A37F" },
+  OpenRouter: { file: "openrouter", color: "#6452FF" },
 };
 
 /** Fallback glyph for skills without a brand mark. */

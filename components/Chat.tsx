@@ -222,7 +222,7 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       className={`${styles.panel} ${open ? styles.open : ""}`}
       role="dialog"
       aria-modal="false"
-      aria-label="AI assistant"
+      aria-label="Portfolio assistant"
       aria-hidden={!open}
     >
       <div className={styles.head}>

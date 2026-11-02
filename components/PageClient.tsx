@@ -35,7 +35,7 @@ export function PageClient() {
       <SiteFooter />
 
       {!chatOpen && (
-        <button type="button" className={styles.launch} onClick={open} aria-label="Open the AI assistant">
+        <button type="button" className={styles.launch} onClick={open} aria-label="Open assistant">
           <span className={styles.pulse} aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path
