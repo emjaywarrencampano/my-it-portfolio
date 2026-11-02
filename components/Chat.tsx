@@ -24,14 +24,59 @@ const START: Message = {
   text: "Hi — I’m Emjay’s assistant. Ask me about his capstone, certifications, or experience. I can also take you to a section.",
 };
 
+/** Each visitor gets 10 written answers per day; quick facts are unlimited. */
+const DAILY_LIMIT = 10;
+const USAGE_KEY = "ewc-ai-usage";
+
+type Usage = { date: string; count: number };
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function readUsage(): Usage {
+  try {
+    const raw = window.localStorage.getItem(USAGE_KEY);
+    if (!raw) return { date: today(), count: 0 };
+    const parsed = JSON.parse(raw) as Usage;
+    if (parsed.date !== today()) return { date: today(), count: 0 };
+    return { date: parsed.date, count: Number(parsed.count) || 0 };
+  } catch {
+    return { date: today(), count: 0 };
+  }
+}
+
+function writeUsage(usage: Usage) {
+  try {
+    window.localStorage.setItem(USAGE_KEY, JSON.stringify(usage));
+  } catch {
+    /* storage may be unavailable */
+  }
+}
+
 export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [messages, setMessages] = useState<Message[]>([START]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [used, setUsed] = useState(0);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const nextId = useRef(1);
   const abortRef = useRef<AbortController | null>(null);
+
+  const remaining = Math.max(0, DAILY_LIMIT - used);
+
+  useEffect(() => {
+    setUsed(readUsage().count);
+  }, []);
+
+  const bumpUsage = useCallback(() => {
+    setUsed((current) => {
+      const next = current + 1;
+      writeUsage({ date: today(), count: next });
+      return next;
+    });
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     const el = bodyRef.current;
@@ -63,6 +108,11 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
     const trimmed = question.trim();
     if (!trimmed || busy) return;
 
+    if (remaining === 0) {
+      setInput("");
+      return;
+    }
+
     const userMessage: Message = { id: nextId.current++, role: "user", text: trimmed };
     const replyId = nextId.current++;
     setMessages((prev) => [...prev, userMessage, { id: replyId, role: "assistant", text: "" }]);
@@ -85,17 +135,28 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
         }),
       });
 
+      if (response.status === 429) {
+        patchReply({
+          text: "That is the limit for now. The quick answers below still work, and you can reach Emjay directly at emjaywarrencampano@gmail.com.",
+        });
+        return;
+      }
+
       const contentType = response.headers.get("content-type") ?? "";
 
-      // Non-streaming responses (curated facts, no key, rate limit, validation).
+      // Non-streaming responses: curated facts are free and unlimited.
       if (!contentType.includes("text/event-stream")) {
-        const data = (await response.json()) as Reply & { error?: string };
+        const data = (await response.json()) as Reply & { error?: string; mode?: string };
+        if (data.mode === "ai") bumpUsage();
         patchReply({
           text: data.text ?? data.error ?? "Something went wrong. Try again.",
           action: data.section ? { text: "", section: data.section } : undefined,
         });
         return;
       }
+
+      // A stream means the question went to a model — count it.
+      bumpUsage();
 
       const reader = response.body?.getReader();
       if (!reader) throw new Error("No stream");
@@ -211,7 +272,7 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
         })}
       </div>
 
-      {messages.length < 3 && (
+      {messages.length < 3 && remaining > 0 && (
         <div className={styles.suggestions}>
           {SUGGESTIONS.map((item) => (
             <button key={item.label} type="button" className={styles.suggest} onClick={() => ask(item.question)}>
@@ -221,29 +282,40 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
         </div>
       )}
 
-      <form
-        className={styles.form}
-        onSubmit={(event) => {
-          event.preventDefault();
-          void ask(input);
-        }}
-      >
-        <input
-          ref={inputRef}
-          type="text"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          placeholder="Ask something…"
-          autoComplete="off"
-          aria-label="Your message"
-          maxLength={500}
-        />
-        <button type="submit" className={styles.send} aria-label="Send" disabled={busy || !input.trim()}>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 12h15M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </form>
+      {remaining === 0 ? (
+        <p className={styles.limit}>
+          You have used today’s {DAILY_LIMIT} answers. Email{" "}
+          <a href="mailto:emjaywarrencampano@gmail.com">emjaywarrencampano@gmail.com</a> anytime.
+        </p>
+      ) : (
+        <form
+          className={styles.form}
+          onSubmit={(event) => {
+            event.preventDefault();
+            void ask(input);
+          }}
+        >
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="Ask something…"
+            autoComplete="off"
+            aria-label="Your message"
+            maxLength={500}
+          />
+          <button type="submit" className={styles.send} aria-label="Send" disabled={busy || !input.trim()}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12h15M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </form>
+      )}
+
+      <p className={styles.usage}>
+        {remaining > 0 ? `${remaining} of ${DAILY_LIMIT} answers left today` : "Daily limit reached"}
+      </p>
     </div>
   );
 }

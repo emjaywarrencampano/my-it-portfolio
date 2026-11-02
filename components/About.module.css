@@ -102,10 +102,28 @@
   color: var(--accent);
 }
 
-.mark {
-  width: 16px;
-  height: 16px;
+.logo {
+  width: 15px;
+  height: 15px;
   display: block;
+  background-color: var(--accent);
+  -webkit-mask-image: var(--logo);
+  mask-image: var(--logo);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: background-color 0.3s var(--ease);
+}
+
+.tile:hover .logo {
+  background-color: var(--brand, var(--accent));
+}
+
+.tile:hover .tileIcon {
+  background: color-mix(in srgb, var(--brand, var(--accent)) 12%, var(--card));
 }
 
 .tileName {

@@ -32,9 +32,12 @@ Components read from that file, so the site updates without touching JSX.
    official `@openrouter/sdk`. The system prompt is built from `content/site.ts`.
 
 If every provider fails, the endpoint still returns a curated answer, so the assistant never
-shows a dead end. Protections: message cap (20), per-message character cap (1,500), output
-token cap (400), a 12s per-model timeout, and a rate limit of 12 requests/minute/IP. The API
-key never reaches the browser.
+shows a dead end.
+
+**Limits:** 10 written answers per visitor per day (tracked in the browser), 10 requests per
+minute per IP on the server, message cap (20), per-message character cap (1,500), output token
+cap (400), and a 12s per-model timeout. Quick facts do not count toward the daily limit. The
+API key never reaches the browser.
 
 ### Models
 

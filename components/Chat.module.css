@@ -226,6 +226,33 @@
   color: var(--muted);
 }
 
+.usage {
+  margin: 0;
+  padding: 0 14px 10px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.limit {
+  margin: 0;
+  padding: 14px 18px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.limit a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .send {
   width: 34px;
   height: 34px;

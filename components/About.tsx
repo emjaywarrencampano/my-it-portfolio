@@ -1,8 +1,8 @@
 import { about } from "@/content/site";
-import { MarkFor } from "./SkillMarks";
+import { SkillLogo } from "./SkillMarks";
 import styles from "./About.module.css";
 
-const PRIMARY_GROUPS = new Set(["Languages", "Tools"]);
+const PRIMARY_GROUPS = new Set(["Languages", "Build & data", "Tools"]);
 
 export function About() {
   const primary = about.skills.filter((group) => PRIMARY_GROUPS.has(group.group));
@@ -35,8 +35,8 @@ export function About() {
                 <ul className={styles.tiles}>
                   {group.items.map((item) => (
                     <li key={item} className={styles.tile}>
-                      <span className={styles.tileIcon} aria-hidden="true">
-                        <MarkFor name={item} className={styles.mark} />
+                      <span className={styles.tileIcon}>
+                        <SkillLogo name={item} className={styles.logo} />
                       </span>
                       <span className={styles.tileName}>{item}</span>
                     </li>

@@ -31,7 +31,7 @@ const MODEL_CHAIN = (
 /** Very small in-memory limiter — good enough for a low-traffic portfolio. */
 const hits = new Map<string, { count: number; reset: number }>();
 const WINDOW_MS = 60_000;
-const LIMIT = 12;
+const LIMIT = 10;
 
 function rateLimited(ip: string) {
   const now = Date.now();

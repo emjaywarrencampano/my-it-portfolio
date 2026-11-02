@@ -137,13 +137,26 @@ export const about = {
     "I am finishing a degree in Information Technology with a Network and Security track, and I keep learning by building things — including the occasional experiment.",
   ],
   skills: [
-    { group: "Languages", items: ["Python", "C++", "JavaScript / TypeScript", "HTML / CSS", "SQL"] },
-    { group: "Tools", items: ["VS Code", "Arduino IDE", "Git & GitHub", "Windows", "AI coding tools"] },
-    { group: "Hardware", items: ["Component diagnostics", "Laptop & phone repair", "Arduino", "Device setup"] },
+    { group: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript", "HTML", "CSS", "SQL"] },
+    { group: "Build & data", items: ["React", "Next.js", "Firebase", "SQLite"] },
+    {
+      group: "Tools",
+      items: [
+        "VS Code",
+        "Git & GitHub",
+        "Arduino IDE",
+        "Windows",
+        "DeepSeek Harness",
+        "Codex",
+        "Claude Code",
+        "Antigravity",
+      ],
+    },
+    { group: "Hardware", items: ["Component diagnostics", "Laptop & phone repair", "Device setup"] },
     { group: "Systems", items: ["Windows setup & management", "Device provisioning", "Troubleshooting"] },
     { group: "Network", items: ["Network configuration", "Network security", "Connectivity testing"] },
     { group: "Data & Records", items: ["Database management", "Records & privacy", "Data encoding"] },
-    { group: "Exploring", items: ["Rust (learning)", "Three.js", "Next.js"] },
+    { group: "Exploring", items: ["Rust (learning)", "Three.js"] },
   ],
 } as const;
 
