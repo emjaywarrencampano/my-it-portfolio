@@ -23,17 +23,30 @@ Components read from that file, so the site updates without touching JSX.
 
 ## The assistant
 
-`POST /api/chat` runs server-side. Three behaviors:
+`POST /api/chat` runs server-side and answers in one of two ways:
 
-1. **No `OPENROUTER_API_KEY`** → deterministic, keyword-based answers from `lib/knowledge.ts`.
-   No external calls, no cost.
-2. **Key present** → streams from OpenRouter using a system prompt built from `content/site.ts`.
-3. **Provider error** → falls back to the deterministic answers.
+1. **Curated facts** — common questions (certifications, capstone, experience, skills,
+   availability) are answered instantly from `lib/knowledge.ts`. No provider call, no cost,
+   no waiting.
+2. **OpenRouter** — open-ended or reasoning questions stream from a free model using the
+   official `@openrouter/sdk`. The system prompt is built from `content/site.ts`.
 
-Protections: message cap (20), per-message character cap (1,500), output token cap (320),
-and a simple in-memory rate limit (12 requests/minute/IP). The API key never reaches the browser.
+If every provider fails, the endpoint still returns a curated answer, so the assistant never
+shows a dead end. Protections: message cap (20), per-message character cap (1,500), output
+token cap (400), a 12s per-model timeout, and a rate limit of 12 requests/minute/IP. The API
+key never reaches the browser.
 
-To use a different model, set `OPENROUTER_MODEL` (for example `anthropic/claude-3.5-haiku`).
+### Models
+
+`OPENROUTER_MODEL` accepts a comma-separated fallback chain:
+
+```
+nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free,google/gemma-4-26b-a4b-it:free,openrouter/free
+```
+
+Free models share a provider pool and can be rate-limited, which is why the curated answers
+exist. To remove that variance, add a small credit balance to OpenRouter (or point
+`OPENROUTER_MODEL` at a paid model) — the free chain costs nothing but varies from ~1s to ~15s.
 
 ## Certificates
 

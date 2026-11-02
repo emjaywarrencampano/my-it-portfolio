@@ -11,6 +11,9 @@ importers:
       '@openrouter/ai-sdk-provider':
         specifier: ^1.5.4
         version: 1.5.4(ai@5.0.283(zod@4.6.7))(zod@4.6.7)
+      '@openrouter/sdk':
+        specifier: ^1.5.33
+        version: 1.5.33
       '@react-three/fiber':
         specifier: ^9.8.2
         version: 9.8.2(@types/react@19.3.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.180.0)
@@ -330,6 +333,9 @@ packages:
 
   '@openrouter/sdk@0.1.27':
     resolution: {integrity: sha512-RH//L10bSmc81q25zAZudiI4kNkLgxF2E+WU42vghp3N6TEvZ6F0jK7uT3tOxkEn91gzmMw9YVmDENy7SJsajQ==}
+
+  '@openrouter/sdk@1.5.33':
+    resolution: {integrity: sha512-hbg4q/tZHOnggBk7Sjkel6COExpbe1+2p4Mt2YyvAloDXtNNaFkMab0SgVfoBdTgzweBlrJJ4jUHwHt5rFiadA==}
 
   '@opentelemetry/api@1.9.0':
     resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
@@ -1288,6 +1294,10 @@ snapshots:
       zod: 4.6.7
 
   '@openrouter/sdk@0.1.27':
+    dependencies:
+      zod: 4.6.7
+
+  '@openrouter/sdk@1.5.33':
     dependencies:
       zod: 4.6.7
 

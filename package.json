@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@openrouter/ai-sdk-provider": "^1.5.4",
+    "@openrouter/sdk": "^1.5.33",
     "@react-three/fiber": "^9.8.2",
     "ai": "^5.0.283",
     "gsap": "3.13.0",

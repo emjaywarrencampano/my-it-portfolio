@@ -60,8 +60,13 @@ const SECTIONS: Array<{ id: string; label: string; pattern: RegExp }> = [
   { id: "#certifications", label: "Certifications", pattern: /cert|cyber|database|network/i },
   { id: "#experience", label: "Experience", pattern: /experience|intern|freelance/i },
   { id: "#about", label: "About", pattern: /about|skills|who/i },
-  { id: "#contact", label: "Contact", pattern: /contact|email|hire|reach/i },
+  { id: "#contact", label: "Contact", pattern: /contact|email|hire|reach|available/i },
 ];
+
+/** Maps a visitor's question to the most relevant page section, if any. */
+export function matchSection(question: string) {
+  return SECTIONS.find((section) => section.pattern.test(question))?.id;
+}
 
 /** Deterministic fallback used when no OPENROUTER_API_KEY is configured. */
 export function fallbackAnswer(question: string): Reply {
@@ -119,4 +124,41 @@ export function fallbackAnswer(question: string): Reply {
   return {
     text: `I can answer questions about his capstone, three Certiport certifications, experience, and how to reach him at ${profile.email}.`,
   };
+}
+
+/**
+ * Questions the deterministic answers handle well. These resolve instantly and
+ * never depend on a provider's availability; everything else goes to the model.
+ */
+const DIRECT_PATTERNS = [
+  /^(what|which|where|who|when)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
+  /^(what|which|where|who|when)\b.*(capstone|track my ride|project|esp32|rfid|\biot\b)/i,
+  /^(what|which)\b.*(skill\w*|tech stack|hardware|windows|arduino|c\+\+)/i,
+  /^(what|which)\b.*(experience|intern\w*|freelance|background)/i,
+  /open to work|are you (open|available)|is he (open|available)|hiring|contact (him|emjay)|his email/i,
+  /^(hi|hello|hey|kumusta)\b/i,
+];
+
+/** Questions that deserve a written answer rather than a lookup. */
+const REASONING_PATTERNS = [
+  /\bwhy\b/i,
+  /\bhow\b/i,
+  /\bcompare\b/i,
+  /\bexplain\b/i,
+  /\bgood fit\b/i,
+  /\bshould\b/i,
+  /\bwould\b/i,
+  /\bcould\b/i,
+  /\brecommend\b/i,
+  /\bthink\b/i,
+  /\bopinion\b/i,
+];
+
+/** True when the question is covered by the curated facts above. */
+export function isDirectQuestion(question: string) {
+  const q = question.trim();
+  if (q.length > 140) return false;
+  if (q.split(/\s+/).length > 12) return false;
+  if (REASONING_PATTERNS.some((pattern) => pattern.test(q))) return false;
+  return DIRECT_PATTERNS.some((pattern) => pattern.test(q));
 }

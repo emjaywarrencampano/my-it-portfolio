@@ -6,6 +6,12 @@ import styles from "./Chat.module.css";
 type Reply = { text: string; section?: string };
 type Message = { id: number; role: "user" | "assistant"; text: string; action?: Reply };
 
+type StreamEvent =
+  | { type: "meta"; model: string }
+  | { type: "delta"; text: string }
+  | { type: "done"; section?: string }
+  | { type: "fallback"; text: string; section?: string };
+
 const SUGGESTIONS = [
   { label: "Certifications", question: "What certifications does he have?" },
   { label: "Track My Ride", question: "Tell me about his capstone." },
@@ -24,8 +30,8 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
   const [busy, setBusy] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
   const nextId = useRef(1);
+  const abortRef = useRef<AbortController | null>(null);
 
   const scrollToBottom = useCallback(() => {
     const el = bodyRef.current;
@@ -33,40 +39,47 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
   }, []);
 
   useEffect(() => {
-    if (open) {
-      const timer = window.setTimeout(() => inputRef.current?.focus(), 250);
-      return () => window.clearTimeout(timer);
-    }
-  }, [open]);
-
-  useEffect(() => {
     if (!open) return;
 
+    const timer = window.setTimeout(() => inputRef.current?.focus(), 250);
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
     };
 
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open, onClose]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
+  useEffect(() => () => abortRef.current?.abort(), []);
+
   async function ask(question: string) {
     const trimmed = question.trim();
     if (!trimmed || busy) return;
 
     const userMessage: Message = { id: nextId.current++, role: "user", text: trimmed };
-    setMessages((prev) => [...prev, userMessage]);
+    const replyId = nextId.current++;
+    setMessages((prev) => [...prev, userMessage, { id: replyId, role: "assistant", text: "" }]);
     setInput("");
     setBusy(true);
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    const patchReply = (patch: Partial<Message>) =>
+      setMessages((prev) => prev.map((message) => (message.id === replyId ? { ...message, ...patch } : message)));
 
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           messages: [{ id: userMessage.id, role: "user", parts: [{ type: "text", text: trimmed }] }],
         }),
@@ -74,46 +87,73 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
 
       const contentType = response.headers.get("content-type") ?? "";
 
-      if (contentType.includes("application/json")) {
+      // Non-streaming responses (curated facts, no key, rate limit, validation).
+      if (!contentType.includes("text/event-stream")) {
         const data = (await response.json()) as Reply & { error?: string };
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: nextId.current++,
-            role: "assistant",
-            text: data.text ?? data.error ?? "Something went wrong. Try again.",
-            action: data.section ? { text: "", section: data.section } : undefined,
-          },
-        ]);
+        patchReply({
+          text: data.text ?? data.error ?? "Something went wrong. Try again.",
+          action: data.section ? { text: "", section: data.section } : undefined,
+        });
         return;
       }
 
-      // Streaming (UI message stream) response from OpenRouter.
-      const text = await response.text();
-      const reply = extractStreamText(text);
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No stream");
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: nextId.current++,
-          role: "assistant",
-          text: reply || "I’m having trouble answering right now. Try again in a moment.",
-        },
-      ]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        { id: nextId.current++, role: "assistant", text: "Connection failed. Please try again." },
-      ]);
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let acc = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
+        for (const line of lines) {
+          if (!line.startsWith("data:")) continue;
+          const payload = line.slice(5).trim();
+          if (!payload) continue;
+
+          let event: StreamEvent;
+          try {
+            event = JSON.parse(payload) as StreamEvent;
+          } catch {
+            continue;
+          }
+
+          if (event.type === "delta") {
+            acc += event.text;
+            patchReply({ text: acc });
+            scrollToBottom();
+          } else if (event.type === "fallback") {
+            patchReply({ text: event.text, action: event.section ? { text: "", section: event.section } : undefined });
+          } else if (event.type === "done") {
+            patchReply({
+              text: acc,
+              action: event.section ? { text: "", section: event.section } : undefined,
+            });
+          }
+        }
+      }
+
+      if (!acc) {
+        patchReply({ text: "I could not answer that just now. Try again in a moment." });
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      patchReply({ text: "Connection failed. Please try again." });
     } finally {
       setBusy(false);
+      abortRef.current = null;
     }
   }
 
   function jumpTo(section: string) {
     onClose();
-    const target = document.querySelector(section);
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelector(section)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   return (
@@ -137,7 +177,7 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
             Online
           </span>
         </span>
-        <button ref={closeRef} type="button" className={styles.close} onClick={onClose} aria-label="Close assistant">
+        <button type="button" className={styles.close} onClick={onClose} aria-label="Close assistant">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
           </svg>
@@ -145,27 +185,30 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       </div>
 
       <div className={styles.body} ref={bodyRef} aria-live="polite">
-        {messages.map((message) => (
-          <div key={message.id} className={`${styles.msg} ${message.role === "user" ? styles.me : styles.bot}`}>
-            {message.text}
-            {message.action?.section && (
-              <button
-                type="button"
-                className={styles.jump}
-                onClick={() => jumpTo(message.action!.section!)}
-              >
-                → Jump to section
-              </button>
-            )}
-          </div>
-        ))}
-        {busy && (
-          <div className={`${styles.msg} ${styles.bot} ${styles.typing}`} aria-label="Assistant is typing">
-            <span />
-            <span />
-            <span />
-          </div>
-        )}
+        {messages.map((message) => {
+          const isEmpty = message.role === "assistant" && message.text.length === 0;
+          if (isEmpty && busy) {
+            return (
+              <div key={message.id} className={`${styles.msg} ${styles.bot} ${styles.typing}`} aria-label="Assistant is typing">
+                <span />
+                <span />
+                <span />
+              </div>
+            );
+          }
+          if (isEmpty) return null;
+
+          return (
+            <div key={message.id} className={`${styles.msg} ${message.role === "user" ? styles.me : styles.bot}`}>
+              {message.text}
+              {message.action?.section && !busy && (
+                <button type="button" className={styles.jump} onClick={() => jumpTo(message.action!.section!)}>
+                  → Jump to section
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {messages.length < 3 && (
@@ -203,26 +246,4 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       </form>
     </div>
   );
-}
-
-/** Pull plain text out of an AI SDK UI message stream. */
-function extractStreamText(stream: string) {
-  const chunks: string[] = [];
-
-  for (const line of stream.split("\n")) {
-    if (!line.startsWith("data:")) continue;
-    const payload = line.slice(5).trim();
-    if (!payload || payload === "[DONE]") continue;
-
-    try {
-      const event = JSON.parse(payload) as { type?: string; delta?: string };
-      if (event.type === "text-delta" && typeof event.delta === "string") {
-        chunks.push(event.delta);
-      }
-    } catch {
-      /* ignore malformed chunks */
-    }
-  }
-
-  return chunks.join("").trim();
 }
