@@ -2,7 +2,12 @@ import { about } from "@/content/site";
 import { SkillLogo } from "./SkillMarks";
 import styles from "./About.module.css";
 
-const PRIMARY_GROUPS = new Set(["Languages", "Build & data", "Tools"]);
+const PRIMARY_GROUPS = new Set([
+  "Languages",
+  "Web Technologies",
+  "Databases",
+  "Tools",
+]);
 
 export function About() {
   const primary = about.skills.filter((group) => PRIMARY_GROUPS.has(group.group));

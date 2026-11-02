@@ -114,9 +114,9 @@ Hard-won content decisions (do not undo without asking Emjay):
   4G LTE, ISO/IEC 25010 scores (4.88 and 5.00), and an architecture diagram. Emjay asked for
   all of that to be removed. The card now says: web app for monitoring vehicles, small hardware
   layer, stack `Web App / Database`, plus "the system itself is not publicly shown."
-- **Skills are the headline**, not the capstone: Python, C++, JavaScript, TypeScript, HTML, CSS,
-  SQL; React, Next.js, Firebase, SQLite; VS Code, Git & GitHub, Arduino IDE, Windows, DeepSeek
-  Harness, Codex, Claude Code, Antigravity.
+- **Skills are the headline**, not the capstone: Python, C++, JavaScript, TypeScript;
+  HTML, CSS, React, Next.js; SQL, SQLite, Firebase; VS Code, Git & GitHub, Arduino IDE,
+  Windows, DeepSeek, Codex, Claude Code, Antigravity.
 - **Rust is listed as "Exploring — Rust (learning)".** Emjay has only built with it via
   AI-assisted ("vibe") coding. Do not promote it to a core skill; he could not defend it in an
   interview.

@@ -137,8 +137,9 @@ export const about = {
     "I am finishing a degree in Information Technology with a Network and Security track, and I keep learning by building things — including the occasional experiment.",
   ],
   skills: [
-    { group: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript", "HTML", "CSS", "SQL"] },
-    { group: "Build & data", items: ["React", "Next.js", "Firebase", "SQLite"] },
+    { group: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript"] },
+    { group: "Web Technologies", items: ["HTML", "CSS", "React", "Next.js"] },
+    { group: "Databases", items: ["SQL", "SQLite", "Firebase"] },
     {
       group: "Tools",
       items: [
@@ -146,7 +147,7 @@ export const about = {
         "Git & GitHub",
         "Arduino IDE",
         "Windows",
-        "DeepSeek Harness",
+        "DeepSeek",
         "Codex",
         "Claude Code",
         "Antigravity",
