@@ -1,0 +1,33 @@
+﻿# dependencies
+/node_modules
+/.pnpm-store
+/.pnp
+.pnp.*
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# local env files
+.env*.local
+.env
+
+# tooling
+*.log
+.pylibs
+.tmp
+mockup.html
+
+# design references & raw sources
+/assets/raw
+/assets/certificates
+
+# os
+.DS_Store
+Thumbs.db
+
+# typescript
+tsconfig.tsbuildinfo

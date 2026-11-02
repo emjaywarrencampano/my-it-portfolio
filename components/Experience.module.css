@@ -1,0 +1,156 @@
+.section {
+  padding-block: clamp(80px, 12vw, 150px);
+  position: relative;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: clamp(36px, 5vw, 64px);
+}
+
+.headLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.num {
+  color: var(--accent);
+}
+
+.title {
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 1;
+  margin: 0;
+}
+
+.note {
+  color: var(--muted);
+  max-width: 34ch;
+  text-align: right;
+  font-size: 14px;
+  margin: 0;
+}
+
+.list {
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 190px 1fr auto;
+  gap: clamp(16px, 3vw, 48px);
+  padding-block: 34px;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+  transition: background 0.4s var(--ease);
+}
+
+.row:hover {
+  background: var(--bg-soft);
+}
+
+.row:hover .role {
+  color: var(--accent);
+}
+
+.period {
+  color: var(--muted);
+  padding-top: 4px;
+  margin: 0;
+}
+
+.role {
+  font-size: clamp(19px, 2vw, 23px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0 0 4px;
+  transition: color 0.35s var(--ease);
+}
+
+.org {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.points {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  max-width: 62ch;
+}
+
+.points li {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  padding-left: 16px;
+  position: relative;
+}
+
+.points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.location {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+  white-space: nowrap;
+  padding-top: 6px;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .note {
+    text-align: left;
+  }
+
+  .row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .period {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: 0 0 6px;
+  }
+
+  .points {
+    grid-column: 1 / -1;
+  }
+
+  .location {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .period {
+    padding-bottom: 0;
+  }
+}
