@@ -224,6 +224,12 @@ export async function POST(request: Request) {
           console.warn(`[chat] empty completion ${model} ${Date.now() - started}ms`);
         } catch (error) {
           console.warn(`[chat] model failed ${model} ${Date.now() - started}ms`, error instanceof Error ? error.message : error);
+          if (yielded) {
+            const section = matchSection(question);
+            controller.enqueue(encoder.encode(sse({ type: "done", ...(section ? { section } : {}) })));
+            controller.close();
+            return;
+          }
         }
       }
 

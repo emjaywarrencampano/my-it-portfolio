@@ -106,9 +106,11 @@ ${skills}
 
 RULES
 - LANGUAGE POLICY (STRICT): You MUST ONLY speak in fluent, natural Tagalog, natural Taglish (Luzon/Manila conversational style), or English. NEVER use Bisaya, Cebuano, or mixed southern dialects (do NOT use words like "kini", "kaugalingon", "dili", "nimo", "mag-surya"). If the visitor speaks Tagalog/Taglish, reply in warm, street-smart Tagalog/Taglish; if they ask in English, reply in polished, natural English.
+- CONCISENESS & CLEAN FORMATTING: Keep your answers clean, well-structured, and concise (typically 2 to 4 punchy sentences or short bullet points). Never duplicate paragraphs, repeat yourself, or dump redundant text summaries.
 - CASUAL QUESTIONS: If someone asks a casual, simple question (e.g. "nanonood ba siya sa youtube?", "kumakain ba siya ng adobo?", "mahilig ba siya sa kape?"), give a friendly, direct, 1-2 sentence human answer! Do NOT dump his entire life history, credentials, or CV for a simple casual question!
 - WEB SYSTEMS EMPHASIS: Always emphasize that Emjay primarily builds Web Systems (MIS, web portals, admin dashboards, responsive web apps) and software. Mention ESP32 hardware and IoT as an extra integration edge, not his only or sole focus.
-- Speak naturally like a real human — warm, witty, confident, with light developer and Pinoy IT humor when appropriate. Never sound like a stiff corporate FAQ or a generic robotic model.
+- PEOPLE & CO-RESEARCHERS (STRICT): The ONLY official co-researcher on his capstone transit research (Track My Ride) is Jastine Ann P. Marcelo. If someone asks if he knows anyone else (e.g., Greychel, Mark, etc.), do NOT claim they are his capstone partner, coworker, or girlfriend! Say politely that they are not part of his official portfolio or academic research records.
+- MANNER & TONE: Always be welcoming, polite, and confident. Never say blunt or dismissive things like "Hindi ko alam kung sino ka". Speak naturally like a real human — warm, witty, confident, with light developer and Pinoy IT humor when appropriate. Never sound like a stiff corporate FAQ or a generic robotic model.
 - Do not use buzzwords or AI hype (say "assistant", "tools", "routing", never "LLM", "AGI", or "AI-powered").
 - Never use the proprietary name "CentraLab" — refer to it only as a "computer laboratory LAN management system" or "laboratory monitoring platform".
 - If someone uses this chat like a Google search engine, asks for random trivia, math, adobo recipes, or weather, playfully banter back with humor: "Bossing, portfolio assistant po ako ni Emjay, hindi Google search bar haha! 🔍" and steer them back to Emjay's tech skills, hardware repairs, or custom systems.
@@ -217,6 +219,42 @@ export function fallbackAnswer(question: string): Reply {
     return {
       text: `Gamer si Emjay at naiintindihan niya ang game mechanics at logic (lalo na sa C++ at Python, o interactive 3D visual canvas sa Three.js), pero ang **pangunahing specialty at karamihan sa ginagawa niya ay Web Systems at Software Solutions** — tulad ng management information systems (MIS), real-time dashboards, database platforms, at responsive web apps. Kung kailangan mo ng web system o software tool, kayang-kaya niyang i-develop!`,
       section: "#work",
+    };
+  }
+
+  // People / Friends / Classmates / Co-researcher check
+  if (/(kilala|kakilala|sino).*(si|ba si|kay)\s+([a-zA-Z]+)/i.test(q)) {
+    const match = q.match(/(kilala|kakilala|sino).*(si|ba si|kay)\s+([a-zA-Z]+)/i);
+    const name = match ? match[3] : "";
+    if (name && !/emjay|jastine|marcelo/i.test(name)) {
+      return {
+        text: `Hindi po kasama si ${name} sa official portfolio at academic research records ni Emjay. Ang nag-iisang opisyal na co-researcher niya sa capstone transit research na Track My Ride ay si Jastine Ann P. Marcelo.`,
+        section: "#work",
+      };
+    }
+  }
+
+  // System Optimization & Performance Enhancement
+  if (
+    /(system\s*optimis|system\s*optimiz|enhance.*system|optimiz.*(system|code|net)|pabilisin.*system|focus.*(enhance|optimiz))/i.test(
+      q
+    )
+  ) {
+    return {
+      text: `Mismo pre! Malaking focus ni Emjay ang system optimization at architectural efficiency — hindi lang basta gumagana, kundi mabilis at scalable:
+• Sa Web Systems: Code-splitting, lazy loading, lightweight state management, at optimized SQL queries para walang N+1 query lag.
+• Sa Desktop Tools: Standalone Windows .exe na walang mabigat na Python installation runtime.
+• Sa Hardware & IoT: FreeRTOS dual-core task scheduling at minimal binary serialization para smooth ang telemetry kahit mahina ang signal.
+• Sa Networks: Connection pooling, keep-alive, at rate limiting para secure at mababa ang latency.`,
+      section: "#work",
+    };
+  }
+
+  // OmniRoute / Local-first model proxy
+  if (/om+ni\s*route/i.test(q)) {
+    return {
+      text: `Ginagamit ni Emjay ang OmniRoute bilang local-first model routing proxy sa kanyang dev setup. Parang smart traffic controller ito na nag-lo-load balance sa iba't ibang AI models (tulad ng Claude Code, DeepSeek, Codex) at awtomatikong nagfa-failover kapag may network latency o API error, para laging tuloy-tuloy at mabilis ang pag-code nang walang downtime.`,
+      section: "#about",
     };
   }
 
@@ -711,10 +749,14 @@ export function fallbackAnswer(question: string): Reply {
     return { text: "Kamusta! Ako ang assistant ni Emjay. Tanungin mo ako tungkol sa mga gawa niyang web systems, coding skills, capstone transit system, Certiport certifications, o IT projects!" };
   }
 
-  // Affirmations & Acknowledgements
+  // Affirmations & Acknowledgements (only when message is a standalone acknowledgment)
   if (
-    /^(sige|geh|cge|ok|okay|copy|noted|ayos|salamat|thanks|thank you)\b/i.test(q) ||
-    /^(sige|geh|cge|ok|okay|ayos|salamat|thanks)/i.test(cq)
+    /^(sige|geh|cge|ok|okay|copy|noted|ayos|salamat|thanks|thank you|pre|boss|bossing|bro|men|po|tol|paps|chief|lods|na|\s)+[\s!.]*$/i.test(
+      q
+    ) ||
+    /^(sige|geh|cge|ok|okay|copy|noted|ayos|salamat|thanks|thank you|pre|boss|bossing|bro|men|po|tol|paps|chief|lods|na|\s)+[\s!.]*$/i.test(
+      cq
+    )
   ) {
     return {
       text: `Walang anuman pre! Nandito lang ako kung may tanong ka pa tungkol sa web systems, coding, hardware, o certifications ni Emjay. Pwede mo rin siyang i-email diretso sa ${profile.email}. 🚀`,
@@ -738,13 +780,16 @@ const DIRECT_PATTERNS = [
   /(sobrang|napaka|gaano|talaga bang|kamusta|kumusta|how).*(galing|kagalig|galig|husay|mahusay|skilled|good).*(code|coding|mag-code|magcode|program)|(sobrang|magaling|kagalig|galig).*(mag-code|magcode|mag code)|sobrang galig|gaano.*code/i,
   /(nanonood|nanood|watch|nood).*(youtube|channel|video|netflix|anime|movie|ba|siya|emjay)|youtube.*(channel|siya|ba)|\byoutube\b/i,
   /(kaya|marunong|gumagawa|alam|can he).*(gumawa|develop|make|build).*(game|games|laro)|game dev(elopment)?/i,
+  /(kilala|kakilala|sino).*(si|ba si|kay)\s+[a-zA-Z]+/i,
+  /(system\s*optimis|system\s*optimiz|enhance.*system|optimiz.*(system|code|net)|pabilisin.*system|focus.*(enhance|optimiz))/i,
+  /om+ni\s*route/i,
   /\b(hosting|host|deploy|deployment|cloud|vps|vercel|netlify|cpanel|server|servers)\b/i,
   /(gaano|ilang).*(tagal|taon).*(gumagawa|gawa|build|develop).*(system|systems|device|code)|tagal.*(system|experience)|years.*experience/i,
   /(high school|isat|secondary).*(marunong|alam|electronics|tinkering|bago)|marunong.*electronics.*(high school|bata)/i,
   /(pinag-aaralan|pinagaaralan|inaaral|aaralan|learning|studying|exploring).*(pa\s*)?(ngayon|now)|currently learning|meron.*pinag.*aralan/i,
   /android|mobile.*(app|system)|cellphone.*system/i,
   /^(lupet|astig|galing|angas|solid|nice|cool|sheesh|grabe|wow|idol)\b/i,
-  /^(sige|geh|cge|ok|okay|copy|noted|ayos|salamat|thanks|thank you)\b/i,
+  /^(sige|geh|cge|ok|okay|copy|noted|ayos|salamat|thanks|thank you|pre|boss|bossing|bro|men|po|tol|paps|chief|lods|na|\s)+[\s!.]*$/i,
   /tell me about yourself|introduce yourself|walk me through|pakilala|tell us about yourself/i,
   /why.*hire|bakit.*(ikaw|siya|dapat).*piliin|why should we choose|what makes you different|what value/i,
   /\bstrengths?\b|kalakasan|biggest strength|greatest strength|\bedge\b/i,

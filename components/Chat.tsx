@@ -24,9 +24,9 @@ const START: Message = {
   text: "Hi — I’m Emjay’s assistant. Ask me about his capstone, certifications, or experience. I can also take you to a section.",
 };
 
-/** Each visitor gets generous written answers per day; quick facts are unlimited. */
-const DAILY_LIMIT = 50;
-const USAGE_KEY = "ewc-ai-usage-v2";
+/** Each visitor gets 10 written answers per day; quick facts are unlimited. */
+const DAILY_LIMIT = 10;
+const USAGE_KEY = "ewc-ai-usage-v3";
 
 type Usage = { date: string; count: number };
 
@@ -131,6 +131,13 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
   useEffect(() => {
     if (!open) return;
 
+    const prevOverflow = document.body.style.overflow;
+    const prevOverscroll = document.body.style.overscrollBehavior;
+
+    // Lock main page scrolling while chat is open on both desktop & mobile
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+
     const timer = window.setTimeout(() => inputRef.current?.focus(), 250);
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -138,6 +145,8 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
 
     window.addEventListener("keydown", onKey);
     return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.overscrollBehavior = prevOverscroll;
       window.clearTimeout(timer);
       window.removeEventListener("keydown", onKey);
     };
@@ -264,104 +273,111 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
   }
 
   return (
-    <div
-      className={`${styles.panel} ${open ? styles.open : ""}`}
-      role="dialog"
-      aria-modal="false"
-      aria-label="Portfolio assistant"
-      aria-hidden={!open}
-    >
-      <div className={styles.head}>
-        <span className={styles.avatar} aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 3.2 13.9 9l5.8 1.9-5.8 1.9L12 18.6l-1.9-5.8L4.3 10.9 10.1 9Z" strokeLinejoin="round" />
-          </svg>
-        </span>
-        <span className={styles.identity}>
-          <b>Emjay’s Assistant</b>
-          <span>
-            <i className={styles.live} aria-hidden="true" />
-            Online
+    <>
+      <div
+        className={`${styles.backdrop} ${open ? styles.backdropOpen : ""}`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div
+        className={`${styles.panel} ${open ? styles.open : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Portfolio assistant"
+        aria-hidden={!open}
+      >
+        <div className={styles.head}>
+          <span className={styles.avatar} aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3.2 13.9 9l5.8 1.9-5.8 1.9L12 18.6l-1.9-5.8L4.3 10.9 10.1 9Z" strokeLinejoin="round" />
+            </svg>
           </span>
-        </span>
-        <button type="button" className={styles.close} onClick={onClose} aria-label="Close assistant">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
-          </svg>
-        </button>
-      </div>
-
-      <div className={styles.body} ref={bodyRef} aria-live="polite">
-        {messages.map((message) => {
-          const isEmpty = message.role === "assistant" && message.text.length === 0;
-          if (isEmpty && busy) {
-            return (
-              <div key={message.id} className={`${styles.msg} ${styles.bot} ${styles.typing}`} aria-label="Assistant is typing">
-                <span />
-                <span />
-                <span />
-              </div>
-            );
-          }
-          if (isEmpty) return null;
-
-          return (
-            <div key={message.id} className={`${styles.msg} ${message.role === "user" ? styles.me : styles.bot}`}>
-              {renderMessageText(message.text)}
-              {message.action?.section && !busy && (
-                <button type="button" className={styles.jump} onClick={() => jumpTo(message.action!.section!)}>
-                  → Jump to section
-                </button>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {messages.length < 3 && remaining > 0 && (
-        <div className={styles.suggestions}>
-          {SUGGESTIONS.map((item) => (
-            <button key={item.label} type="button" className={styles.suggest} onClick={() => ask(item.question)}>
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {remaining === 0 ? (
-        <p className={styles.limit}>
-          You have used today’s {DAILY_LIMIT} answers. Email{" "}
-          <a href="mailto:emjaywarrencampano@gmail.com">emjaywarrencampano@gmail.com</a> anytime.
-        </p>
-      ) : (
-        <form
-          className={styles.form}
-          onSubmit={(event) => {
-            event.preventDefault();
-            void ask(input);
-          }}
-        >
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Ask something…"
-            autoComplete="off"
-            aria-label="Your message"
-            maxLength={500}
-          />
-          <button type="submit" className={styles.send} aria-label="Send" disabled={busy || !input.trim()}>
+          <span className={styles.identity}>
+            <b>Emjay’s Assistant</b>
+            <span>
+              <i className={styles.live} aria-hidden="true" />
+              Online
+            </span>
+          </span>
+          <button type="button" className={styles.close} onClick={onClose} aria-label="Close assistant">
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 12h15M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
             </svg>
           </button>
-        </form>
-      )}
+        </div>
 
-      <p className={styles.usage}>
-        {remaining > 0 ? `${remaining} of ${DAILY_LIMIT} answers left today` : "Daily limit reached"}
-      </p>
-    </div>
+        <div className={styles.body} ref={bodyRef} aria-live="polite">
+          {messages.map((message) => {
+            const isEmpty = message.role === "assistant" && message.text.length === 0;
+            if (isEmpty && busy) {
+              return (
+                <div key={message.id} className={`${styles.msg} ${styles.bot} ${styles.typing}`} aria-label="Assistant is typing">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              );
+            }
+            if (isEmpty) return null;
+
+            return (
+              <div key={message.id} className={`${styles.msg} ${message.role === "user" ? styles.me : styles.bot}`}>
+                {renderMessageText(message.text)}
+                {message.action?.section && !busy && (
+                  <button type="button" className={styles.jump} onClick={() => jumpTo(message.action!.section!)}>
+                    → Jump to section
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {messages.length < 3 && remaining > 0 && (
+          <div className={styles.suggestions}>
+            {SUGGESTIONS.map((item) => (
+              <button key={item.label} type="button" className={styles.suggest} onClick={() => ask(item.question)}>
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {remaining === 0 ? (
+          <p className={styles.limit}>
+            You have used today’s {DAILY_LIMIT} answers. Email{" "}
+            <a href="mailto:emjaywarrencampano@gmail.com">emjaywarrencampano@gmail.com</a> anytime.
+          </p>
+        ) : (
+          <form
+            className={styles.form}
+            onSubmit={(event) => {
+              event.preventDefault();
+              void ask(input);
+            }}
+          >
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Ask something…"
+              autoComplete="off"
+              aria-label="Your message"
+              maxLength={500}
+            />
+            <button type="submit" className={styles.send} aria-label="Send" disabled={busy || !input.trim()}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 12h15M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </form>
+        )}
+
+        <p className={styles.usage}>
+          {remaining > 0 ? `${remaining} of ${DAILY_LIMIT} answers left today` : "Daily limit reached"}
+        </p>
+      </div>
+    </>
   );
 }
