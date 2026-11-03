@@ -15,7 +15,7 @@ export function buildSystemPrompt() {
 
   const skills = about.skills.map((group) => `${group.group}: ${group.items.join(", ")}`).join("\n");
 
-  return `You are the personal assistant on ${profile.name}'s portfolio website. Answer questions about his background, education, programming skills, development workflow, full systems, and availability.
+  return `You are the personal assistant on ${profile.name}'s portfolio website. Answer questions about his background, education, programming skills, hobbies, development workflow, full systems, and availability.
 
 FACTS
 Name: ${profile.name}
@@ -33,8 +33,14 @@ EDUCATION & ALUMNI
 - High School / Secondary: Isabela School of Arts and Trades (ISAT, 2016–2022).
 - Elementary: San Isidro Elementary School, Amityville Elementary School, East Central School – Ilagan, South Central School – Ilagan (2010–2016).
 
+HOBBIES & PERSONAL INTERESTS
+- Gaming: Passionate gamer (PC and video games). Gaming sparked his early fascination with computer hardware, high refresh rates, low latency, and system optimization.
+- Hardware Tinkering: Loves opening up and assembling desktop PCs, soldering, experimenting with microcontrollers (ESP32, Arduino), and repairing laptops and mobile phones.
+- Tech Exploration: Regularly experiments with modern developer tools, local model routing (OmniRoute), and new software architectures.
+
 PROGRAMMING LANGUAGES & TECHNICAL CAPABILITIES
-- Python: Codes in Python manually from scratch. Builds backend APIs (Flask, Socket.IO, SQLite), desktop applications (pywebview), and packages Python projects into standalone Windows .exe executables (via PyInstaller/pywebview) so end-users can run tools without having Python installed. Experienced with in-process media streaming (PyAV) and system automation scripts.
+- Can he code? YES! Emjay is a full-fledged programmer and developer who writes clean code manually.
+- Python: Writes Python code manually from scratch. Builds backend APIs (Flask, Socket.IO, SQLite), desktop applications (pywebview), and packages Python projects into standalone Windows .exe executables (via PyInstaller/pywebview) so end-users can run tools without having Python installed. Experienced with in-process media streaming (PyAV) and system automation scripts.
 - C++: Writes manual C++ code for microcontrollers (ESP32, Arduino) in Arduino IDE and VS Code. Implements FreeRTOS dual-core multitasking, hardware peripheral drivers (UART, SPI, I2C), 5V relay actuators, and EEPROM offline non-volatile memory caching.
 - Java: Solid foundational and practical experience in Java, object-oriented programming (OOP), data structures, and software development principles.
 - Web Development: JavaScript, TypeScript, HTML/CSS, React, Next.js, PHP, responsive layouts, client-server data flow.
@@ -90,7 +96,8 @@ RULES
 - Do not use buzzwords or AI hype (say "assistant", "tools", "routing", never "LLM", "AGI", or "AI-powered").
 - Never use the proprietary name "CentraLab" — refer to it only as a "computer laboratory LAN management system" or "laboratory monitoring platform".
 - Only state facts listed above. If something is unknown, say you do not have that detail and point to ${profile.email}.
-- If someone asks if he can code in Python, C++, Java, or build full systems/.exe files, enthusiastically confirm his skills with details from above.
+- If someone asks if he can code, confirm enthusiastically that he writes code in Python, C++, Java, JS/TS, and SQL.
+- If someone asks about his hobbies or gaming, explain that he is a gamer who loves PC gaming, hardware tinkering, and building DIY electronics.
 - If someone asks about vibecoding or using tools, explain that he has deep fundamental coding knowledge and uses modern assistants to build entire systems rapidly.
 - If someone asks if they can have a custom device made or hire him for ESP32/IoT hardware, confirm that he builds custom ESP32 hardware and IoT systems and invite them to reach out at ${profile.email}.
 - If the visitor asks to see a section, tell them which section to scroll to (Work, Certifications, Experience, About, or Contact).`;
@@ -102,7 +109,7 @@ const SECTIONS: Array<{ id: string; label: string; pattern: RegExp }> = [
   { id: "#work", label: "Work", pattern: /work|capstone|track|project|ride|system/i },
   { id: "#certifications", label: "Certifications", pattern: /cert|cyber|database|network/i },
   { id: "#experience", label: "Experience", pattern: /experience|intern|freelance|education|graduat|school|university/i },
-  { id: "#about", label: "About", pattern: /about|skills|who|device|esp32|python|c\+\+|java|code|vibe/i },
+  { id: "#about", label: "About", pattern: /about|skills|who|device|esp32|python|c\+\+|java|code|vibe|hobby|gaming/i },
   { id: "#contact", label: "Contact", pattern: /contact|email|hire|reach|available|pagawa|magpagawa/i },
 ];
 
@@ -138,8 +145,16 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
+  // Gaming, hobbies, and personal interests
+  if (/hobby|hobbies|gaming|game|gamer|laro|nilalaro|hilig|free time|downtime|interests/i.test(q)) {
+    return {
+      text: `Outside of coding, Emjay is an avid gamer who loves PC and video games, which sparked his interest in high-performance hardware. He also loves tinkering with electronics, building custom ESP32/Arduino gadgets, and repairing laptops and phones.`,
+      section: "#about",
+    };
+  }
+
   // Python skills, manual coding, and .exe packaging
-  if (/python|\.exe\b|executable|marunong.*python|code.*python|python.*code/i.test(q)) {
+  if (/python|\bexe\b|executable/i.test(q)) {
     return {
       text: `Yes, Emjay codes in Python manually from scratch. He builds backend APIs (Flask, Socket.IO, SQLite), desktop tools (pywebview), and packages Python apps into standalone Windows .exe executables so clients can run them without installing Python.`,
       section: "#about",
@@ -147,7 +162,7 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // C++ skills & microcontrollers
-  if (/c\+\+|c plus plus|cpp|marunong.*c\+\+|code.*c\+\+/i.test(q)) {
+  if (/c\+\+|c plus plus|cpp/i.test(q)) {
     return {
       text: `Yes, Emjay writes manual C++ code for microcontrollers like the ESP32 and Arduino, implementing FreeRTOS dual-core firmware, hardware peripheral drivers (UART, SPI, I2C), and offline EEPROM caching.`,
       section: "#about",
@@ -155,9 +170,25 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // Java experience
-  if (/\bjava\b|marunong.*java|code.*java/i.test(q)) {
+  if (/\bjava\b/i.test(q)) {
     return {
       text: `Yes, Emjay has solid experience with Java, including object-oriented programming (OOP), data structures, and fundamental software engineering principles from his IT degree.`,
+      section: "#about",
+    };
+  }
+
+  // General coding / can he code / programmer / developer
+  if (/marunong.*(code|program|mag-code|magcode|mag-program|magprogram|mag develop)|(can|does).*he.*(code|program|develop)|can you code|programmer|coder|developer|know how to code|coding skills|programming/i.test(q)) {
+    return {
+      text: `Yes, absolutely! Emjay is a skilled programmer who writes clean code manually in Python, C++, Java, JavaScript, TypeScript, and SQL. He builds full-stack systems from microcontroller firmware up to cloud databases and real-time web dashboards.`,
+      section: "#about",
+    };
+  }
+
+  // General IT skills, computer troubleshooting, hardware
+  if (/computer|marunong.*computer|it specialist|tech support/i.test(q)) {
+    return {
+      text: `Emjay is a certified IT Specialist with hands-on expertise in computer hardware troubleshooting, component-level laptop and mobile repairs, Windows OS setup, network configuration, and full-stack software development.`,
       section: "#about",
     };
   }
@@ -175,6 +206,14 @@ export function fallbackAnswer(question: string): Reply {
     return {
       text: `Emjay builds complete systems from scratch — physical ESP32 circuits and C++ firmware, up to databases and real-time web dashboards. He holds Certiport certifications in Cybersecurity and Network Security, implementing hardware RFID interlocks and role-based access control.`,
       section: "#work",
+    };
+  }
+
+  // Hardware repairs, laptop & phone troubleshooting, PC builds
+  if (/repair|troubleshoot|ayos|sira|laptop|phone|hardware.*fix|format|reformat|pc build|assemble/i.test(q)) {
+    return {
+      text: `Emjay has worked as a freelance electronics and IT technician since 2022, specializing in component-level laptop and mobile repairs, custom PC assembly, Windows OS deployment, and network setup.`,
+      section: "#about",
     };
   }
 
@@ -223,10 +262,18 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // Contact / Open to work
-  if (/work|job|hire|open|available|contact|email/.test(q)) {
+  if (/work|job|hire|open|available|contact|email|reach/.test(q)) {
     return {
       text: `He is open to IT support, systems, and development roles based in Ilagan, Isabela. The fastest way to reach him is ${profile.email}.`,
       section: "#contact",
+    };
+  }
+
+  // Who is Emjay / About
+  if (/who are you|who is emjay|sino si emjay|sino ka|tell me about emjay|about emjay/i.test(q)) {
+    return {
+      text: `Emjay Warren P. Campano is an IT Specialist and developer based in Ilagan, Isabela, graduating with a BSIT in Network and Security from ISU Ilagan (Class of 2026). He specializes in hardware-to-software integration, custom ESP32 IoT devices, Windows systems, and full-stack web platforms.`,
+      section: "#about",
     };
   }
 
@@ -248,11 +295,11 @@ export function fallbackAnswer(question: string): Reply {
 
   // Greeting
   if (/hello|hi|hey|kumusta/.test(q)) {
-    return { text: "Hello. Ask me anything about Emjay's work, certifications, education, or skills." };
+    return { text: "Hello. Ask me anything about Emjay's work, coding skills, gaming hobbies, certifications, or education." };
   }
 
   return {
-    text: `I can answer questions about his graduation from ISU Ilagan, manual coding in Python/C++/Java, capstone, Certiport certifications, custom ESP32 hardware, and how to reach him at ${profile.email}.`,
+    text: `I can answer questions about his graduation from ISU Ilagan, manual coding in Python/C++/Java, gaming hobbies, Certiport certifications, custom ESP32 hardware, and how to reach him at ${profile.email}.`,
   };
 }
 
@@ -265,8 +312,12 @@ const DIRECT_PATTERNS = [
   /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(python|\.exe|executable)/i,
   /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(c\+\+|c plus plus|cpp)/i,
   /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(\bjava\b)/i,
+  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(code|coding|program|programmer|developer|software|computer)/i,
+  /hobby|hobbies|gaming|game|gamer|laro|hilig/i,
   /vibe\s*cod|how does he (code|build|develop)|paano siya mag/i,
   /buong system|full system|end-to-end|security|cybersecurity/i,
+  /repair|troubleshoot|ayos|sira|laptop|phone|pc build|assemble/i,
+  /who are you|who is emjay|sino si emjay|sino ka/i,
   /^(what|which|where|who|when|tell me about|pwede|can|magkano|kaya|ano|anong)\b.*(magpagawa|pagawa|custom.*device|make.*device|build.*device|commission|hire.*device|\besp32\b|\besp 32\b|iot.*device|custom.*hardware|develop|kaya|gumawa|how can he help)/i,
   /^(what|which|where|who|when|tell me about|ano|anong)\b.*(kaya.*gawin|pwede.*gawin|can he (build|develop|make|do))/i,
   /^(what|which|where|who|when|tell me about)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,

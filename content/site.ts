@@ -135,6 +135,7 @@ export const about = {
   paragraphs: [
     "Most of my day is practical: diagnosing hardware, setting up Windows, tracing a network problem, or writing a script or web tool when an existing one does not fit.",
     "I am finishing a degree in Information Technology with a Network and Security track, and I keep learning by building things — including the occasional experiment.",
+    "When away from the terminal, I spend my time PC gaming, tinkering with microcontrollers, or tuning and repairing custom hardware.",
   ],
   skills: [
     { group: "Languages", items: ["Python", "C++", "Java", "JavaScript", "TypeScript"] },
