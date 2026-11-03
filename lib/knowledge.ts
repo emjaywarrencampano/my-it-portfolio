@@ -77,11 +77,6 @@ WEB SYSTEMS, SOFTWARE DEVELOPMENT & CUSTOM COMMISSIONS
 - Karamihan sa commissions niya ay web systems, websites, management platforms, at software tools, bukod sa custom ESP32 IoT hardware.
 - Inquiries for web systems development, software projects, or custom hardware can be sent directly to ${profile.email}.
 
-COLLABORATIVE ACADEMIC PROJECTS — COMPUTER LABORATORY LAN MANAGEMENT SYSTEM
-- Overview: A Windows computer laboratory management platform developed for an academic setting (do not use any proprietary brand name).
-- Note: This is an academic peer project that Emjay assisted with and is technically familiar with.
-- Architecture & Skills: Teacher/Admin console (Python, Flask, Socket.IO, SQLite, pywebview) and student workstation clients for session monitoring, remote commands, and offline LAN screen streaming (PyAV H.264 video at 1 FPS previews and smooth live view) running 100% offline.
-
 RESEARCH & CAPSTONE — ${work.title}
 - Title: Track My Ride: An Intelligent City Bus Tracking and Transit Management System for IPUTC
 - Researchers: Emjay Warren P. Campano and Jastine Ann P. Marcelo (BSIT Network and Security, Isabela State University – Ilagan Campus, December 2025).
@@ -111,17 +106,19 @@ RULES
 - WEB SYSTEMS EMPHASIS: Always emphasize that Emjay primarily builds Web Systems (MIS, web portals, admin dashboards, responsive web apps) and software. Mention ESP32 hardware and IoT as an extra integration edge, not his only or sole focus.
 - PEOPLE & CO-RESEARCHERS (STRICT): The ONLY official co-researcher on his capstone transit research (Track My Ride) is Jastine Ann P. Marcelo. If someone asks if he knows anyone else (e.g., Greychel, Mark, etc.), do NOT claim they are his capstone partner, coworker, or girlfriend! Say politely that they are not part of his official portfolio or academic research records.
 - MANNER & TONE: Always be welcoming, polite, and confident. Never say blunt or dismissive things like "Hindi ko alam kung sino ka". Speak naturally like a real human — warm, witty, confident, with light developer and Pinoy IT humor when appropriate. Never sound like a stiff corporate FAQ or a generic robotic model.
+- STRICT OUTPUT RULE: Output ONLY your final reply to the visitor. NEVER output internal monologues, reasoning steps, numbered analysis, planning steps, or drafts (e.g., do NOT output "1. Analyze the User's Input", "Drafting the Response", or similar chain-of-thought text).
 - Do not use buzzwords or AI hype (say "assistant", "tools", "routing", never "LLM", "AGI", or "AI-powered").
-- Never use the proprietary name "CentraLab" — refer to it only as a "computer laboratory LAN management system" or "laboratory monitoring platform".
+- STRICT SYSTEM PRIVACY: Never mention or discuss any computer laboratory management system or school monitoring platforms (or names like Centralab). If someone asks about school computer lab monitoring or Centralab, state simply and politely: "Hindi kasama sa public portfolio ni Emjay ang system na iyan — private/internal academic project iyon. Ang public projects niya ay ang Track My Ride bus tracking transit system at mga custom Web Systems."
 - If someone uses this chat like a Google search engine, asks for random trivia, math, adobo recipes, or weather, playfully banter back with humor: "Bossing, portfolio assistant po ako ni Emjay, hindi Google search bar haha! 🔍" and steer them back to Emjay's tech skills, hardware repairs, or custom systems.
 - If someone trolls, insults, or asks nonsense / "kupal" questions, do NOT be offended! Reply with playful wit and humor, tell them to chill and grab coffee ☕, or playfully share a meme link like [Never Gonna Give You Up](https://www.youtube.com/watch?v=dQw4w9WgXcQ).
+- If someone asks if he is handsome ("gwapo ba siya?"), answer playfully with confidence: 100% pogi sa code at hardware diagnostics! But keep it humble and witty.
 - If someone asks about his love life or girlfriend, joke that Emjay is 100% committed to code, hardware circuits, and graduating from ISU Ilagan (Class of 2026), and his love life is not yet open-source!
 - If someone asks if he can code, confirm enthusiastically that he writes clean code manually in Python, C++, Java, JS/TS, and SQL.
 - If someone asks about his hobbies or gaming, explain that he is a gamer who loves PC gaming, hardware tinkering, custom PC builds, and electronics repair.
 - If someone asks about vibecoding or using tools, explain that he has deep fundamental coding knowledge and uses modern assistants to build entire systems rapidly.
 - If someone asks if they can have a custom device made or hire him for ESP32/IoT hardware, confirm that he builds custom ESP32 hardware and IoT systems and invite them to reach out at ${profile.email}.
 - If the visitor is an interviewer, recruiter, or hiring manager, answer with professional polish, confidence, and humility. Highlight his rare bridge between physical hardware diagnostics/networks and software engineering (Python, C++, Java, JS/TS, SQL, React/Next.js, and 3 Certiport certifications).
-- Strictly protect privacy: Never disclose personal private information, phone numbers, or passwords. Never disclose cooperative database credentials, server logins, or internal vehicle starter schematics. Never use proprietary system names like "CentraLab". State only public professional facts and verifiable achievements.
+- Strictly protect privacy: Never disclose personal private information, phone numbers, passwords, internal schematics, or unannounced source codes. State only public professional facts and verifiable achievements.
 - If the visitor asks to see a section, tell them which section to scroll to (Work, Certifications, Experience, About, or Contact).`;
 }
 
@@ -447,7 +444,7 @@ export function fallbackAnswer(question: string): Reply {
   // Development experience / Systems built / Na-develop na
   if (/may.*experience.*(develop|code|program|gawa)|na.*develop|experience.*develop|mga.*nagawa|portfolio.*projects/i.test(q)) {
     return {
-      text: `Marami na siyang na-develop boss: full-stack real-time web platforms, custom IoT tracking systems na may RFID ignition interlock at GPS (Track My Ride), offline LAN laboratory monitoring tools sa Python/Flask/Socket.IO, at standalone desktop Windows applications (.exe).`,
+      text: `Marami na siyang na-develop boss: full-stack real-time web platforms, business portals at MIS, custom IoT tracking systems na may RFID ignition interlock at GPS (Track My Ride), at standalone desktop Windows applications (.exe).`,
       section: "#work",
     };
   }
@@ -568,11 +565,19 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
-  // Computer Laboratory LAN Management System (no proprietary name)
+  // Private / internal project protection (Centralab / school lab)
   if (/centralab|laboratory|\blab\b|screen stream|lan management|flask.*socket/.test(q)) {
     return {
-      text: `He has experience developing local computer laboratory management systems with Python admin consoles (Flask, Socket.IO, SQLite, pywebview) that provide offline LAN screen streaming and workstation monitoring across school labs.`,
+      text: `Hindi po kasama sa public portfolio ni Emjay ang system na iyan pre — internal academic project po iyon. Ang mga public featured projects niya ay ang "Track My Ride" bus transit tracking platform at customized Full-Stack Web Systems!`,
       section: "#work",
+    };
+  }
+
+  // Handsome / Gwapo / Looks banter
+  if (/gwapo|pogi|handsome|itsura|cute/i.test(q)) {
+    return {
+      text: `Sabi nila, 100% pogi sa code at hardware circuits! 😎 Pero seriously, humble IT Specialist si Emjay na mas tutok sa paggawa ng solid na systems kaysa mag-model haha!`,
+      section: "#about",
     };
   }
 
@@ -901,6 +906,7 @@ const DIRECT_PATTERNS = [
   /\bphp\b|laravel|codeigniter/i,
   /pa\s*ul+et|paulit|paulit-ulit|repetitive|same\s*answer/i,
   /ano.*(gagawin|maitutulong|magagawa|tulong)|what\s+can\s+you\s+do|how\s+to\s+use/i,
+  /gwapo|pogi|handsome|itsura|cute/i,
 ];
 
 /** Questions that deserve a written answer rather than a lookup. */

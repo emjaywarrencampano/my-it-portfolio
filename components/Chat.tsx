@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { buildSystemPrompt, fallbackAnswer, matchSection } from "@/lib/knowledge";
+import { buildSystemPrompt, fallbackAnswer, isDirectQuestion, matchSection } from "@/lib/knowledge";
 import styles from "./Chat.module.css";
 
 function getClientKey(): string {
@@ -17,6 +17,30 @@ function getClientKey(): string {
     // ignore
   }
   return "";
+}
+
+function cleanThinkingText(raw: string): string {
+  // Remove <think>...</think> tags if emitted by reasoning models
+  let text = raw.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
+  // If a model leaks planning or chain-of-thought analysis
+  if (/(\bAnalyze the User's Input\b|\bIdentify the Persona\b|\bDrafting the Response\b|\bInternal Monologue\b)/i.test(text)) {
+    const lines = text.split("\n");
+    const cleanLines: string[] = [];
+    let pastReasoning = false;
+    for (let i = lines.length - 1; i >= 0; i--) {
+      const line = lines[i].trim();
+      if (/^\d+\.\s*\*\*|^\*\s*\*(Analyze|Identify|Formulate|Draft|Option|Refin)/i.test(line)) {
+        pastReasoning = true;
+        break;
+      }
+      if (line) cleanLines.unshift(lines[i]);
+    }
+    if (pastReasoning && cleanLines.length > 0) {
+      text = cleanLines.join("\n").trim();
+    }
+  }
+  return text;
 }
 
 type Reply = { text: string; section?: string };
@@ -213,6 +237,17 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       }
     };
 
+    // Direct verified facts and banter resolve instantly with zero latency and zero hallucination risk
+    if (isDirectQuestion(trimmed)) {
+      try {
+        await streamFallback(fallbackAnswer(trimmed));
+      } finally {
+        setBusy(false);
+        abortRef.current = null;
+      }
+      return;
+    }
+
     // Prepare full conversation history so the assistant maintains continuous context and memory
     const history = messages
       .filter((m) => m.text && m.id > 0)
@@ -228,11 +263,11 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       { role: "user", content: trimmed },
     ];
 
+    // Standard instruction-tuned models (non-reasoning to prevent internal monologue leak)
     const models = [
-      "openrouter/free",
       "google/gemini-2.0-flash-lite-preview-02-05:free",
-      "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
       "meta-llama/llama-3.3-70b-instruct:free",
+      "openrouter/free",
     ];
 
     let answered = false;
@@ -253,7 +288,7 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
             model,
             messages: apiMessages,
             max_tokens: 500,
-            temperature: 0.6,
+            temperature: 0.5,
             stream: true,
           }),
           signal: controller.signal,
@@ -284,9 +319,12 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
               const delta = parsed.choices?.[0]?.delta?.content;
               if (delta) {
                 acc += delta;
-                answered = true;
-                patchReply({ text: acc });
-                scrollToBottom();
+                const cleaned = cleanThinkingText(acc);
+                if (cleaned) {
+                  answered = true;
+                  patchReply({ text: cleaned });
+                  scrollToBottom();
+                }
               }
             } catch {
               continue;
@@ -294,11 +332,10 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
           }
         }
 
-        if (answered && acc.trim().length > 0) {
+        const finalClean = cleanThinkingText(acc);
+        if (answered && finalClean.length > 0) {
           const sec = matchSection(trimmed);
-          if (sec) {
-            patchReply({ text: acc, action: { text: "", section: sec } });
-          }
+          patchReply({ text: finalClean, action: sec ? { text: "", section: sec } : undefined });
           break;
         }
       } catch (err) {
