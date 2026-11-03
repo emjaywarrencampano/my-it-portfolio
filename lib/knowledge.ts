@@ -39,13 +39,23 @@ HOBBIES & PERSONAL INTERESTS
 - Gaming: Passionate gamer (PC and video games). Gaming sparked his early fascination with computer hardware, high refresh rates, low latency, and system optimization.
 - Hardware Tinkering: Loves opening up and assembling desktop PCs, soldering, experimenting with microcontrollers (ESP32, Arduino), and repairing laptops and mobile phones.
 - Tech Exploration: Regularly experiments with modern developer tools, local model routing (OmniRoute), and new software architectures.
+- Entertainment / Media: Avid gamer and tech enthusiast. Watches YouTube for hardware teardowns, tech reviews, benchmark comparisons, coding/web development tutorials, and gaming highlights.
+
+CORE IDENTITY & PRIMARY SPECIALTY: WEB SYSTEMS & FULL-STACK DEVELOPMENT
+- Primary Craft: Emjay is primarily a **Web Systems Developer & IT Specialist**. Karamihan sa ginagawa niya ay **Full-Stack Web Systems and Software Applications**:
+  - Management Information Systems (MIS) and admin portals
+  - Inventory, records management, and business transaction web platforms
+  - Real-time monitoring dashboards, tracking portals, and reporting platforms
+  - Web Stacks: HTML5, CSS3, JavaScript, TypeScript, React, Next.js, Node.js, PHP, Python (Flask), SQL, SQLite, and Firebase Realtime Database.
+  - Desktop Software: Python desktop apps with pywebview packaged into standalone Windows .exe executables.
+- Hardware & IoT as an Extra Integration Edge: Unlike web developers who only know browsers, Emjay has the rare capability to bridge physical hardware (microcontrollers, ESP32, GPS, RFID, starter relays, sensors) directly into his web dashboards! But do NOT frame him as purely an ESP32 hardware maker — his main everyday craft and majority of projects are **web systems and full-stack software development**.
 
 PROGRAMMING LANGUAGES & TECHNICAL CAPABILITIES
 - Can he code? YES! Emjay is a full-fledged programmer and developer who writes clean code manually.
-- Python: Writes Python code manually from scratch. Builds backend APIs (Flask, Socket.IO, SQLite), desktop applications (pywebview), and packages Python projects into standalone Windows .exe executables (via PyInstaller/pywebview) so end-users can run tools without having Python installed. Experienced with in-process media streaming (PyAV) and system automation scripts.
+- Web Development: JavaScript, TypeScript, HTML/CSS, React, Next.js, PHP, responsive layouts, REST APIs, client-server data flow.
+- Python: Writes Python code manually from scratch. Builds backend APIs (Flask, Socket.IO, SQLite), desktop applications (pywebview), and packages Python projects into standalone Windows .exe executables (via PyInstaller/pywebview) so end-users can run tools without having Python installed.
 - C++: Writes manual C++ code for microcontrollers (ESP32, Arduino) in Arduino IDE and VS Code. Implements FreeRTOS dual-core multitasking, hardware peripheral drivers (UART, SPI, I2C), 5V relay actuators, and EEPROM offline non-volatile memory caching.
 - Java: Solid foundational and practical experience in Java, object-oriented programming (OOP), data structures, and software development principles.
-- Web Development: JavaScript, TypeScript, HTML/CSS, React, Next.js, PHP, responsive layouts, client-server data flow.
 - Databases: SQL, SQLite, Firebase Realtime Database with structured schemas, queries, and role-based permissions.
 
 DEVELOPMENT WORKFLOW & PHILOSOPHY (VIBECODING WITH DEEP FOUNDATIONS)
@@ -55,16 +65,17 @@ DEVELOPMENT WORKFLOW & PHILOSOPHY (VIBECODING WITH DEEP FOUNDATIONS)
 
 FULL-STACK SYSTEM BUILDING & SECURITY EXPERTISE
 - Can he build an entire system end-to-end? YES! He builds complete systems from scratch:
-  1. Hardware layer: Custom ESP32/Arduino circuits, sensors (GPS, RFID), relay switches, step-down voltage regulators (LM2596 from 12V/24V to 5V/3.3V).
-  2. Firmware layer: C++ FreeRTOS dual-core task scheduling and offline EEPROM event logging.
-  3. Network layer: Wi-Fi modems, WebSockets, or local servers.
-  4. Backend/Data layer: SQL, SQLite, and Firebase Realtime Database.
-  5. Frontend/Dashboard layer: Real-time web dashboards (React, Next.js, PHP, Leaflet, OSRM road snapping) and desktop applications.
+  1. Frontend/Dashboard layer: Real-time web dashboards (React, Next.js, PHP, Leaflet, OSRM road snapping) and desktop applications.
+  2. Backend/Data layer: SQL, SQLite, and Firebase Realtime Database with secure API endpoints.
+  3. Network layer: Wi-Fi, WebSockets, or local servers.
+  4. Firmware layer (optional IoT integration): C++ FreeRTOS dual-core task scheduling and offline EEPROM event logging.
+  5. Hardware layer (optional): Custom ESP32/Arduino circuits, sensors (GPS, RFID), relay switches, voltage regulators.
 - Security Expertise: Holds Certiport IT Specialist certifications in Cybersecurity and Network Security. Implements hardware-level access controls (RFID driver authentication interlocking starter solenoids to physically stop unauthorized ignition), role-based permissions, hashed credentials, and remote device locking.
 
-CUSTOM ESP32 HARDWARE, IOT DEVICES & COMMISSIONS
-- Can clients/visitors commission or hire him to build a device or system? YES!
-- Inquiries for custom ESP32 devices, hardware prototypes, or systems development can be sent directly to ${profile.email}.
+WEB SYSTEMS, SOFTWARE DEVELOPMENT & CUSTOM COMMISSIONS
+- Can clients/visitors commission or hire him to build a web system or device? YES!
+- Karamihan sa commissions niya ay web systems, websites, management platforms, at software tools, bukod sa custom ESP32 IoT hardware.
+- Inquiries for web systems development, software projects, or custom hardware can be sent directly to ${profile.email}.
 
 COLLABORATIVE ACADEMIC PROJECTS — COMPUTER LABORATORY LAN MANAGEMENT SYSTEM
 - Overview: A Windows computer laboratory management platform developed for an academic setting (do not use any proprietary brand name).
@@ -94,7 +105,9 @@ SKILLS
 ${skills}
 
 RULES
-- LANGUAGE POLICY (STRICT): You MUST ONLY speak in Tagalog, Taglish, or English. NEVER use or output any other language (no Chinese, Japanese, Spanish, Russian, or other foreign languages). Match the visitor's language: if they speak Tagalog/Taglish, reply in warm, street-smart Tagalog/Taglish; if they ask in English, reply in polished, natural English.
+- LANGUAGE POLICY (STRICT): You MUST ONLY speak in fluent, natural Tagalog, natural Taglish (Luzon/Manila conversational style), or English. NEVER use Bisaya, Cebuano, or mixed southern dialects (do NOT use words like "kini", "kaugalingon", "dili", "nimo", "mag-surya"). If the visitor speaks Tagalog/Taglish, reply in warm, street-smart Tagalog/Taglish; if they ask in English, reply in polished, natural English.
+- CASUAL QUESTIONS: If someone asks a casual, simple question (e.g. "nanonood ba siya sa youtube?", "kumakain ba siya ng adobo?", "mahilig ba siya sa kape?"), give a friendly, direct, 1-2 sentence human answer! Do NOT dump his entire life history, credentials, or CV for a simple casual question!
+- WEB SYSTEMS EMPHASIS: Always emphasize that Emjay primarily builds Web Systems (MIS, web portals, admin dashboards, responsive web apps) and software. Mention ESP32 hardware and IoT as an extra integration edge, not his only or sole focus.
 - Speak naturally like a real human — warm, witty, confident, with light developer and Pinoy IT humor when appropriate. Never sound like a stiff corporate FAQ or a generic robotic model.
 - Do not use buzzwords or AI hype (say "assistant", "tools", "routing", never "LLM", "AGI", or "AI-powered").
 - Never use the proprietary name "CentraLab" — refer to it only as a "computer laboratory LAN management system" or "laboratory monitoring platform".
@@ -169,14 +182,41 @@ export function fallbackAnswer(question: string): Reply {
 
   // How good is he at coding / Coding proficiency
   if (
-    /(gaano|kamusta|kumusta|how).*(galing|kagalig|husay|mahusay|skilled|good).*(code|coding|mag-code|magcode|program)|gaano.*code/i.test(
+    /(sobrang|napaka|gaano|talaga bang|kamusta|kumusta|how).*(galing|kagalig|galig|husay|mahusay|skilled|good).*(code|coding|mag-code|magcode|program)|(sobrang|magaling|kagalig|galig).*(mag-code|magcode|mag code)|sobrang galig|gaano.*code/i.test(
       q
     ) ||
-    /(gaano|how).*(galing|kagalig|husay|good).*(code|program)/i.test(cq)
+    /(sobrang|gaano|how).*(galing|kagalig|galig|husay|good).*(code|program)/i.test(cq)
   ) {
     return {
-      text: `Bihasa at subok sa practical coding! Hindi lang puro copy-paste — marunong mag-code manually from scratch sa Python, C++, Java, JS/TS, at SQL. Nakagawa na siya ng complete systems tulad ng Track My Ride transit system na may live GPS at RFID ignition lock, at laboratory monitoring tools. Gamit din niya ang modern tools para mabilis mag-develop nang hindi nasasakripisyo ang security at architecture.`,
+      text: `Oo naman bossing, subok at bihasa sa practical coding! Hindi lang puro copy-paste — marunong mag-code manually from scratch sa mga full-stack web systems (React, Next.js, TypeScript, PHP, Python, SQL) at microcontroller firmware (C++). Nakagawa na siya ng complete systems tulad ng Track My Ride live transit web dashboard at laboratory monitoring tools. Gamit din niya ang modern tools para mabilis mag-develop nang may matibay na security at architecture.`,
       section: "#about",
+    };
+  }
+
+  // YouTube / Watching / Videos / Streaming
+  if (
+    /(nanonood|nanood|watch|nood).*(youtube|channel|video|netflix|anime|movie|ba|siya|emjay)|youtube.*(channel|siya|ba)|\byoutube\b/i.test(
+      q
+    ) ||
+    /^(nanonood|nanood|watch).*(youtube)/i.test(cq) ||
+    /\byoutube\b/i.test(cq)
+  ) {
+    return {
+      text: `Oo naman pre! Nanonood si Emjay sa YouTube lalo na ng mga PC hardware teardowns, tech reviews, benchmark tests, coding at web development tutorials, at minsan gaming highlights pampalipas-oras pagkatapos mag-code o mag-troubleshoot.`,
+      section: "#about",
+    };
+  }
+
+  // Can he make games / Game development
+  if (
+    /(kaya|marunong|gumagawa|alam|can he).*(gumawa|develop|make|build).*(game|games|laro)|game dev(elopment)?/i.test(
+      q
+    ) ||
+    /(gumawa|make|develop).*(game|games)/i.test(cq)
+  ) {
+    return {
+      text: `Gamer si Emjay at naiintindihan niya ang game mechanics at logic (lalo na sa C++ at Python, o interactive 3D visual canvas sa Three.js), pero ang **pangunahing specialty at karamihan sa ginagawa niya ay Web Systems at Software Solutions** — tulad ng management information systems (MIS), real-time dashboards, database platforms, at responsive web apps. Kung kailangan mo ng web system o software tool, kayang-kaya niyang i-develop!`,
+      section: "#work",
     };
   }
 
@@ -458,15 +498,27 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
-  // Custom device orders / ESP32 / IoT hardware / What can he build / develop / services
+  // Custom device orders / ESP32 / IoT hardware commissions
   if (
-    /magpagawa|pagawa|custom.*device|make.*device|build.*device|commission|hire.*device|hardware.*project|\besp32\b|\besp 32\b|iot.*device|custom.*hardware|develop|kaya.*(gawin|gumawa|develop|build|make)|gumawa.*device|anong?.*(kaya|pwede)|what can he (build|develop|make|do)|how can he help|services/i.test(
+    /magpagawa.*(device|hardware)|custom.*(device|hardware)|make.*device|build.*device|commission.*(device|hardware)|\besp32\b|\besp 32\b|iot.*device|hardware.*project/i.test(
       q
     )
   ) {
     return {
-      text: `Yes! Emjay builds custom ESP32 IoT hardware devices (RFID access control, GPS vehicle tracking, sensor telemetry, and starter relays) and connects them directly to real-time web dashboards. For custom device commissions or system projects, you can email him at ${profile.email}.`,
+      text: `Yes! Bukod sa web systems, gumagawa rin si Emjay ng custom ESP32 IoT hardware devices (RFID access control, GPS vehicle tracking, sensor telemetry, at starter relays) at ikinokonekta ito diretso sa mga live web dashboards. Para sa custom device o hardware projects, pwede mo siyang i-email sa ${profile.email}.`,
       section: "#contact",
+    };
+  }
+
+  // What can he build / develop / services / kaya gawin (HIGHLIGHT WEB SYSTEMS!)
+  if (
+    /magpagawa|pagawa|develop|kaya.*(gawin|gumawa|develop|build|make)|gumawa.*system|anong?.*(kaya|pwede)|what can he (build|develop|make|do)|how can he help|services|anong.*system|mga.*system/i.test(
+      q
+    )
+  ) {
+    return {
+      text: `Karamihan sa ginagawa ni Emjay ay **Web Systems at Software Applications** — tulad ng management information systems (MIS), admin dashboards, inventory at records portals, at responsive web apps gamit ang React, Next.js, Python/Flask, PHP, at SQL/Firebase. Dagdag pa rito, may kakaiba siyang kakayahan na mag-integrate ng physical hardware (ESP32 IoT devices, GPS, RFID) diretso sa web system para sa live monitoring! Para sa system development o project inquiries, pwede mo siyang i-email sa ${profile.email}.`,
+      section: "#work",
     };
   }
 
@@ -656,7 +708,7 @@ export function fallbackAnswer(question: string): Reply {
 
   // Greeting
   if (/^(hello|hi|hey|kumusta|magandang|good\s*(morning|afternoon|evening))\b/i.test(q) || /^(hello|hi|hey|kumusta)\b/i.test(cq)) {
-    return { text: "Kamusta! Ako ang assistant ni Emjay. Tanungin mo ako tungkol sa coding skills niya, capstone, Certiport certifications, gaming hobbies, o pagpapagawa ng custom devices!" };
+    return { text: "Kamusta! Ako ang assistant ni Emjay. Tanungin mo ako tungkol sa mga gawa niyang web systems, coding skills, capstone transit system, Certiport certifications, o IT projects!" };
   }
 
   // Affirmations & Acknowledgements
@@ -665,14 +717,14 @@ export function fallbackAnswer(question: string): Reply {
     /^(sige|geh|cge|ok|okay|ayos|salamat|thanks)/i.test(cq)
   ) {
     return {
-      text: `Walang anuman pre! Nandito lang ako kung may tanong ka pa tungkol sa systems, coding, hardware, o certifications ni Emjay. Pwede mo rin siyang i-email diretso sa ${profile.email}. 🚀`,
+      text: `Walang anuman pre! Nandito lang ako kung may tanong ka pa tungkol sa web systems, coding, hardware, o certifications ni Emjay. Pwede mo rin siyang i-email diretso sa ${profile.email}. 🚀`,
       section: "#contact",
     };
   }
 
   // Warm, human conversational response
   return {
-    text: `Nandito ako para tulungan ka pre! Specialty ko ikwento ang mga gawa at kakayahan ni Emjay — mula coding (Python/C++/Java/Next.js), custom ESP32 IoT devices, hardware repairs, hanggang sa capstone transit research at Certiport certifications niya. May specific project o tanong ka ba tungkol sa kanya? Pwede mo rin siyang kontakin diretso sa ${profile.email}!`,
+    text: `Nandito ako para tulungan ka pre! Specialty ko ikwento ang mga gawa at kakayahan ni Emjay — karamihan ay mga Web Systems at software applications (React, Next.js, Python, PHP, SQL), bukod pa sa custom ESP32 IoT devices, hardware repairs, at certifications niya. May specific web project o tanong ka ba tungkol sa kanya? Pwede mo rin siyang kontakin diretso sa ${profile.email}!`,
   };
 }
 
@@ -683,7 +735,9 @@ export function fallbackAnswer(question: string): Reply {
 const DIRECT_PATTERNS = [
   /^(bye|goodbye|paalam|babay|see you|catch you|talk later)\b|alis na (ako|ko)|sige.*(alis|pre|boss|bro)|cge.*(alis|pre|boss|bro)|bye na/i,
   /(anong?|ano|what|tell me).*(masasabi|masabi|tingin|opinion|say|impression).*(kay|about).*emjay|describe.*emjay|kilala.*emjay/i,
-  /(gaano|kamusta|kumusta|how).*(galing|kagalig|husay|mahusay|skilled|good).*(code|coding|mag-code|magcode|program)|gaano.*code/i,
+  /(sobrang|napaka|gaano|talaga bang|kamusta|kumusta|how).*(galing|kagalig|galig|husay|mahusay|skilled|good).*(code|coding|mag-code|magcode|program)|(sobrang|magaling|kagalig|galig).*(mag-code|magcode|mag code)|sobrang galig|gaano.*code/i,
+  /(nanonood|nanood|watch|nood).*(youtube|channel|video|netflix|anime|movie|ba|siya|emjay)|youtube.*(channel|siya|ba)|\byoutube\b/i,
+  /(kaya|marunong|gumagawa|alam|can he).*(gumawa|develop|make|build).*(game|games|laro)|game dev(elopment)?/i,
   /\b(hosting|host|deploy|deployment|cloud|vps|vercel|netlify|cpanel|server|servers)\b/i,
   /(gaano|ilang).*(tagal|taon).*(gumagawa|gawa|build|develop).*(system|systems|device|code)|tagal.*(system|experience)|years.*experience/i,
   /(high school|isat|secondary).*(marunong|alam|electronics|tinkering|bago)|marunong.*electronics.*(high school|bata)/i,
@@ -730,8 +784,8 @@ const DIRECT_PATTERNS = [
   /buong system|full system|end-to-end|security|cybersecurity/i,
   /repair|troubleshoot|ayos|sira|laptop|phone|pc build|assemble/i,
   /who are you|who is emjay|sino si emjay|sino ka/i,
-  /^(what|which|where|who|when|tell me about|pwede|can|magkano|kaya|ano|anong)\b.*(magpagawa|pagawa|custom.*device|make.*device|build.*device|commission|hire.*device|\besp32\b|\besp 32\b|iot.*device|custom.*hardware|develop|kaya|gumawa|how can he help)/i,
-  /^(what|which|where|who|when|tell me about|ano|anong)\b.*(kaya.*gawin|pwede.*gawin|can he (build|develop|make|do))/i,
+  /magpagawa.*(device|hardware)|custom.*(device|hardware)|make.*device|build.*device|commission.*(device|hardware)|\besp32\b|\besp 32\b|iot.*device|hardware.*project/i,
+  /magpagawa|pagawa|develop|kaya.*(gawin|gumawa|develop|build|make)|gumawa.*system|anong?.*(kaya|pwede)|what can he (build|develop|make|do)|how can he help|services|anong.*system|mga.*system|web.*system/i,
   /^(what|which|where|who|when|tell me about|ano|anong)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
   /^(what|which|where|who|when|tell me about|ano|anong)\b.*(capstone|track my ride|project|rfid|\biot\b|research|thesis)/i,
   /^(what|which|where|who|when|tell me about|ano|anong)\b.*(laboratory|\blab\b|screen stream|lan management)/i,
