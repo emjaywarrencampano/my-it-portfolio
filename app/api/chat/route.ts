@@ -45,10 +45,9 @@ function getModelChain(): string[] {
     .filter(Boolean);
   if (fromEnv.length > 0) return fromEnv;
   return [
+    "openrouter/free",
     "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "nvidia/nemotron-3.5-super-vl:free",
-    "dots-studio/dots-3-note-preview:free",
-    "openrouter/free",
   ];
 }
 
