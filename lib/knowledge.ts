@@ -104,6 +104,8 @@ RULES
 - If someone asks about his hobbies or gaming, explain that he is a gamer who loves PC gaming, hardware tinkering, custom PC builds, and electronics repair.
 - If someone asks about vibecoding or using tools, explain that he has deep fundamental coding knowledge and uses modern assistants to build entire systems rapidly.
 - If someone asks if they can have a custom device made or hire him for ESP32/IoT hardware, confirm that he builds custom ESP32 hardware and IoT systems and invite them to reach out at ${profile.email}.
+- If the visitor is an interviewer, recruiter, or hiring manager, answer with professional polish, confidence, and humility. Highlight his rare bridge between physical hardware diagnostics/networks and software engineering (Python, C++, Java, JS/TS, SQL, React/Next.js, and 3 Certiport certifications).
+- Strictly protect privacy: Never disclose personal private information, phone numbers, or passwords. Never disclose cooperative database credentials, server logins, or internal vehicle starter schematics. Never use proprietary system names like "CentraLab". State only public professional facts and verifiable achievements.
 - If the visitor asks to see a section, tell them which section to scroll to (Work, Certifications, Experience, About, or Contact).`;
 }
 
@@ -203,8 +205,8 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
-  // Worth it ba / Why hire / Trustworthiness in system building
-  if (/worth it|sulit|bakit.*si emjay|why.*hire|recommend.*emjay/i.test(q)) {
+  // Worth it ba / Trustworthiness in system building
+  if (/worth it|sulit|recommend.*emjay/i.test(q)) {
     return {
       text: `Sobrang sulit at worth it boss! Certified IT Specialist si Emjay (Cybersecurity, Databases, Network Security), marunong mag-code mula hardware circuits (ESP32) hanggang full-stack web platforms at standalone desktop tools (.exe). Hands-on siya mula planning hanggang deployment! Pwede mo siyang i-email sa ${profile.email}.`,
       section: "#contact",
@@ -320,7 +322,7 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // Full-stack system development and security
-  if (/buong system|full system|end-to-end|security|cybersecurity|network security/i.test(q)) {
+  if (/buong system|full system|end-to-end|(cyber)?security expertise|security background/i.test(q)) {
     return {
       text: `Emjay builds complete systems from scratch — physical ESP32 circuits and C++ firmware, up to databases and real-time web dashboards. He holds Certiport certifications in Cybersecurity and Network Security, implementing hardware RFID interlocks and role-based access control.`,
       section: "#work",
@@ -364,7 +366,7 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // Capstone & Thesis - Track My Ride
-  if (/track|capstone|project|ride|iot|iputc|thesis|research/.test(q)) {
+  if (/track my ride|\btracking\b|\btracker\b|capstone|iputc|thesis|research/i.test(q)) {
     return {
       text: `Track My Ride is his 2025 BSIT capstone research for IPUTC at ISU Ilagan, co-developed with Jastine Ann Marcelo. It connects vehicle IoT hardware with a real-time web dashboard for live transit tracking, which they successfully defended and completed.`,
       section: "#work",
@@ -380,10 +382,98 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // Contact / Open to work
-  if (/work|job|hire|open|available|contact|email|reach/.test(q)) {
+  if (/\b(open to work|looking for (work|a job)|hiring|contact|email|reach him)\b/i.test(q)) {
     return {
       text: `He is open to IT support, systems, and development roles based in Ilagan, Isabela. The fastest way to reach him is ${profile.email}.`,
       section: "#contact",
+    };
+  }
+
+  // Job Interview: Tell me about yourself / Introduce yourself / Elevator pitch
+  if (/tell me about yourself|introduce yourself|walk me through|pakilala|tell us about yourself/i.test(q)) {
+    return {
+      text: `Emjay is an IT Specialist graduating with a BSIT in Network and Security from Isabela State University – Ilagan Campus (Class of 2026). He bridges hardware and software: from component-level repairs, Windows administration, and network security, up to full-stack development in Python, C++, Java, and modern web frameworks. He holds 3 Certiport IT Specialist certifications and has been supporting clients as a freelance IT technician since 2022.`,
+      section: "#about",
+    };
+  }
+
+  // Job Interview: Why should we hire you? / Bakit ikaw ang dapat piliin?
+  if (/why.*hire.*(you|him|emjay)|bakit.*(ikaw|siya|dapat).*piliin|why should we choose|what makes you different|what value/i.test(q)) {
+    return {
+      text: `Emjay offers a rare combination of physical hardware troubleshooting and real software engineering. Rather than just writing code or just crimping cables, he understands how data flows end-to-end — from microcontroller sensors, through network security rules, up to cloud databases and responsive web dashboards. He is certified, adaptable, and disciplined.`,
+      section: "#about",
+    };
+  }
+
+  // Job Interview: Strengths / Kalakasan
+  if (/\bstrengths?\b|kalakasan|biggest strength|greatest strength|\bedge\b/i.test(q)) {
+    return {
+      text: `His core strengths are practical problem solving, hardware-to-software integration, and rapid self-learning. Whether diagnosing complex motherboard faults, setting up secure network environments, or developing custom software from scratch, he works systematically until systems run reliably and securely.`,
+      section: "#about",
+    };
+  }
+
+  // Job Interview: Weaknesses / Areas of improvement
+  if (/\bweakness(es)?\b|kahinaan|area.*improvement|biggest weakness/i.test(q)) {
+    return {
+      text: `Early on, his intense curiosity led him to take on every single part of a project alone. Through his capstone research and university records internship, he learned the power of modular collaboration, clear documentation, and delegation to deliver high-quality systems faster as a team.`,
+      section: "#about",
+    };
+  }
+
+  // Job Interview: Career goals / Where do you see yourself in 3-5 years?
+  if (/3.*to.*5.*years|5.*years|career goal|future plan|san mo nakikita sarili mo|saan mo nakikita|aspirations/i.test(q)) {
+    return {
+      text: `In 3 to 5 years, Emjay aims to grow into an Enterprise Systems & Network Security Engineer or Senior Solutions Developer, architecting resilient network infrastructure, secure cloud-connected platforms, and pursuing advanced industry cybersecurity credentials.`,
+      section: "#about",
+    };
+  }
+
+  // Job Interview: Handling pressure / Tight deadlines
+  if (/pressure|tight deadline|stress|paano.*pressure|handle.*pressure|under pressure/i.test(q)) {
+    return {
+      text: `He approaches pressure methodically: breaking complex requirements into prioritized deliverables, isolating critical blockers early, and leveraging modern developer tools alongside disciplined testing to deliver stable solutions without compromising security.`,
+      section: "#about",
+    };
+  }
+
+  // Job Interview: Teamwork vs Solo
+  if (/team player|teamwork|team.*or.*solo|solo.*or.*team|mag-isa.*o.*team|collaborat/i.test(q)) {
+    return {
+      text: `He excels at both: highly independent and focused when building hardware prototypes or coding standalone modules, but actively communicative in teams — proven by his collaborative capstone transit research and his multi-office university records internship.`,
+      section: "#experience",
+    };
+  }
+
+  // Job Interview: Relocation / On-site / Remote / Hybrid
+  if (/relocate|willing.*relocate|work setup|on-site.*remote|remote.*hybrid|wfh/i.test(q)) {
+    return {
+      text: `Emjay is based in Ilagan, Isabela, and is open to local on-site positions in the region, as well as hybrid or remote IT and developer roles anywhere in the Philippines. Specific arrangements can be discussed via ${profile.email}.`,
+      section: "#contact",
+    };
+  }
+
+  // Job Interview: Expected salary / Compensation / Rate
+  if (/salary|rate|sweldo|sahod|compensation|expected salary|asking salary/i.test(q)) {
+    return {
+      text: `His compensation expectations are open and negotiable based on the role, responsibilities, and industry standards for IT Specialists and Junior Developers. Formal offers can be discussed via ${profile.email}.`,
+      section: "#contact",
+    };
+  }
+
+  // Job Interview: Why Network and Security?
+  if (/why.*network and security|bakit.*network and security|bakit.*(network|security).*track/i.test(q)) {
+    return {
+      text: `He chose the Network and Security specialization because modern software doesn't operate in a vacuum. Mastering packet routing, firewall rules, encryption, and authentication allows him to build software that is robust, protected, and resilient against real-world threats.`,
+      section: "#certifications",
+    };
+  }
+
+  // Job Interview: Difficult problem solved / Technical challenge
+  if (/technical challenge|difficult problem|challenging project|hardest problem|bug.*solved|problema.*na-solve/i.test(q)) {
+    return {
+      text: `A key technical challenge was handling offline vehicle data in his capstone (Track My Ride) during rural cellular dead zones. Emjay engineered an EEPROM non-volatile memory caching routine in C++ on the microcontroller to log sensor events offline and batch-sync them once network connectivity was restored.`,
+      section: "#work",
     };
   }
 
@@ -458,6 +548,17 @@ export function fallbackAnswer(question: string): Reply {
  * never depend on a provider's availability; everything else goes to the model.
  */
 const DIRECT_PATTERNS = [
+  /tell me about yourself|introduce yourself|walk me through|pakilala|tell us about yourself/i,
+  /why.*hire|bakit.*(ikaw|siya|dapat).*piliin|why should we choose|what makes you different|what value/i,
+  /\bstrengths?\b|kalakasan|biggest strength|greatest strength|\bedge\b/i,
+  /\bweakness(es)?\b|kahinaan|area.*improvement|biggest weakness/i,
+  /3.*to.*5.*years|5.*years|career goal|future plan|san mo nakikita sarili mo|saan mo nakikita|aspirations/i,
+  /pressure|tight deadline|stress|paano.*pressure|handle.*pressure|under pressure/i,
+  /team player|teamwork|team.*or.*solo|solo.*or.*team|mag-isa.*o.*team|collaborat/i,
+  /relocate|willing.*relocate|work setup|on-site.*remote|remote.*hybrid|wfh/i,
+  /salary|rate|sweldo|sahod|compensation|expected salary|asking salary/i,
+  /why.*network and security|bakit.*network and security|bakit.*(network|security).*track/i,
+  /technical challenge|difficult problem|challenging project|hardest problem|bug.*solved|problema.*na-solve/i,
   /porn|bastos|bold|nude|\bsex\b|hubad/i,
   /ilang taon|how old|\bage\b|taon na|edad/i,
   /worth it|sulit|why.*hire/i,
