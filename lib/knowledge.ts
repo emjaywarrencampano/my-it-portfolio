@@ -277,10 +277,10 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
-  // Core skills & hardware
-  if (/skill|tech|stack|hardware|windows|arduino|tool/.test(q)) {
+  // Core skills & developer tools
+  if (/skill|tech|stack|hardware|windows|arduino|tool|omniroute|hermes|opencode|openrouter/i.test(q)) {
     return {
-      text: `Core skills: hardware diagnostics and repair, Windows systems, network configuration, web development, databases (SQL, SQLite, Firebase), and modern developer tools like VS Code, Git, and automated coding assistants.`,
+      text: `Emjay's core toolkit includes languages (Python, C++, Java, JS/TS, SQL), web & database stacks (React, Next.js, Firebase, SQLite), hardware & OS setup (Windows, Arduino IDE, electronics repair), and modern developer tools (VS Code, Git & GitHub, OmniRoute, Hermes, OpenCode, OpenRouter, Claude Code, DeepSeek, Codex, Antigravity).`,
       section: "#about",
     };
   }
@@ -323,8 +323,8 @@ const DIRECT_PATTERNS = [
   /^(what|which|where|who|when|tell me about)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
   /^(what|which|where|who|when|tell me about)\b.*(capstone|track my ride|project|rfid|\biot\b|research|thesis)/i,
   /^(what|which|where|who|when|tell me about)\b.*(laboratory|\blab\b|screen stream|lan management)/i,
-  /^(what|which|tell me about)\b.*(skill\w*|tech stack|hardware|windows|arduino|tool\w*|omniroute|hermes|opencode|openrouter)/i,
-  /^(what|which|tell me about)\b.*(experience|intern\w*|freelance|background)/i,
+  /^(what|which|tell me about|ano|anong)\b.*(skill\w*|tech stack|hardware|windows|arduino|tool\w*|omniroute|hermes|opencode|openrouter)/i,
+  /^(what|which|tell me about|ano|anong)\b.*(experience|intern\w*|freelance|background)/i,
   /open to work|are you (open|available)|is he (open|available)|hiring|contact (him|emjay)|his email/i,
   /^(hi|hello|hey|kumusta)\b/i,
 ];
