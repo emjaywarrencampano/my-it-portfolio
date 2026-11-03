@@ -1,3 +1,5 @@
+import { assetPath } from "@/lib/paths";
+
 type Logo = { file: string; color: string };
 
 /** Official marks from Simple Icons (CC0), stored in /public/logos. */
@@ -54,7 +56,7 @@ export function SkillLogo({ name, className }: { name: string; className?: strin
       className={className}
       style={
         {
-          "--logo": `url(/logos/${logo.file}.svg)`,
+          "--logo": `url(${assetPath(`/logos/${logo.file}.svg`)})`,
           "--brand": logo.color,
         } as React.CSSProperties
       }

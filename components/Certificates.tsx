@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { certificates, type Certificate } from "@/content/site";
+import { assetPath } from "@/lib/paths";
 import styles from "./Certificates.module.css";
 
 export function Certificates() {
@@ -49,7 +50,7 @@ export function Certificates() {
             >
               <span className={styles.imageWrap}>
                 <Image
-                  src={cert.image}
+                  src={assetPath(cert.image)}
                   alt={`IT Specialist ${cert.name} certificate awarded to ${"Emjay Warren Pascua Campano"}`}
                   width={cert.width}
                   height={cert.height}
@@ -101,7 +102,7 @@ export function Certificates() {
           </button>
           <div className={styles.lightboxInner} onClick={(event) => event.stopPropagation()}>
             <Image
-              src={active.image}
+              src={assetPath(active.image)}
               alt={`IT Specialist ${active.name} certificate`}
               width={active.width}
               height={active.height}

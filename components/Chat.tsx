@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { fallbackAnswer, isDirectQuestion } from "@/lib/knowledge";
+import { assetPath } from "@/lib/paths";
 import styles from "./Chat.module.css";
 
 type Reply = { text: string; section?: string };
@@ -179,8 +181,34 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
     const patchReply = (patch: Partial<Message>) =>
       setMessages((prev) => prev.map((message) => (message.id === replyId ? { ...message, ...patch } : message)));
 
+    const streamFallback = async (fb: { text: string; section?: string }) => {
+      const words = fb.text.split(" ");
+      let acc = "";
+      for (let i = 0; i < words.length; i++) {
+        if (controller.signal.aborted) return;
+        acc += (i === 0 ? "" : " ") + words[i];
+        patchReply({ text: acc });
+        scrollToBottom();
+        await new Promise((r) => setTimeout(r, 12));
+      }
+      if (fb.section) {
+        patchReply({ text: fb.text, action: { text: "", section: fb.section } });
+      }
+    };
+
+    // Client-side instant direct answers (100% resilient on static hosting like GitHub Pages)
+    if (isDirectQuestion(trimmed)) {
+      try {
+        await streamFallback(fallbackAnswer(trimmed));
+      } finally {
+        setBusy(false);
+        abortRef.current = null;
+      }
+      return;
+    }
+
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch(assetPath("/api/chat"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: controller.signal,
@@ -193,6 +221,12 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
         patchReply({
           text: "That is the limit for now. The quick answers below still work, and you can reach Emjay directly at emjaywarrencampano@gmail.com.",
         });
+        return;
+      }
+
+      // If backend route is not available (e.g. static hosting on GitHub Pages returns 404), fallback to client knowledge
+      if (!response.ok) {
+        await streamFallback(fallbackAnswer(trimmed));
         return;
       }
 
@@ -256,11 +290,12 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       }
 
       if (!acc) {
-        patchReply({ text: "I could not answer that just now. Try again in a moment." });
+        await streamFallback(fallbackAnswer(trimmed));
       }
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
-      patchReply({ text: "Connection failed. Please try again." });
+      // Graceful fallback if network is unreachable
+      await streamFallback(fallbackAnswer(trimmed));
     } finally {
       setBusy(false);
       abortRef.current = null;
