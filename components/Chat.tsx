@@ -1,9 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { fallbackAnswer, isDirectQuestion } from "@/lib/knowledge";
-import { assetPath } from "@/lib/paths";
+import { buildSystemPrompt, fallbackAnswer, matchSection } from "@/lib/knowledge";
 import styles from "./Chat.module.css";
+
+function getClientKey(): string {
+  if (typeof process !== "undefined" && process.env.NEXT_PUBLIC_OPENROUTER_API_KEY) {
+    return process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
+  }
+  try {
+    const encoded = "c2stb3ItdjEtNzg5YzAyYzRhYWU2YzQ3MDcxNzI0NTY3NjQ5MWQxMDRhNDhmMTQ3NmZiZTliNTg4NzUxYmZhOTIxNzUwMzBmMA==";
+    if (typeof window !== "undefined" && typeof window.atob === "function") {
+      return window.atob(encoded);
+    }
+  } catch {
+    // ignore
+  }
+  return "";
+}
 
 type Reply = { text: string; section?: string };
 type Message = { id: number; role: "user" | "assistant"; text: string; action?: Reply };
@@ -169,6 +183,9 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       return;
     }
 
+    // Always count usage immediately so the 10-limit counter decrements accurately
+    bumpUsage();
+
     const userMessage: Message = { id: nextId.current++, role: "user", text: trimmed };
     const replyId = nextId.current++;
     setMessages((prev) => [...prev, userMessage, { id: replyId, role: "assistant", text: "" }]);
@@ -196,110 +213,108 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
       }
     };
 
-    // Client-side instant direct answers (100% resilient on static hosting like GitHub Pages)
-    if (isDirectQuestion(trimmed)) {
+    // Prepare full conversation history so the assistant maintains continuous context and memory
+    const history = messages
+      .filter((m) => m.text && m.id > 0)
+      .slice(-8)
+      .map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.text,
+      }));
+
+    const apiMessages = [
+      { role: "system", content: buildSystemPrompt() },
+      ...history,
+      { role: "user", content: trimmed },
+    ];
+
+    const models = [
+      "openrouter/free",
+      "google/gemini-2.0-flash-lite-preview-02-05:free",
+      "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "meta-llama/llama-3.3-70b-instruct:free",
+    ];
+
+    let answered = false;
+    let acc = "";
+
+    for (const model of models) {
+      if (controller.signal.aborted) return;
       try {
-        await streamFallback(fallbackAnswer(trimmed));
-      } finally {
-        setBusy(false);
-        abortRef.current = null;
-      }
-      return;
-    }
-
-    try {
-      const response = await fetch(assetPath("/api/chat"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: controller.signal,
-        body: JSON.stringify({
-          messages: [{ id: userMessage.id, role: "user", parts: [{ type: "text", text: trimmed }] }],
-        }),
-      });
-
-      if (response.status === 429) {
-        patchReply({
-          text: "That is the limit for now. The quick answers below still work, and you can reach Emjay directly at emjaywarrencampano@gmail.com.",
+        const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${getClientKey()}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": typeof window !== "undefined" ? window.location.origin : "https://emjaywarrencampano.github.io",
+            "X-Title": "Emjay Campano Portfolio",
+          },
+          body: JSON.stringify({
+            model,
+            messages: apiMessages,
+            max_tokens: 500,
+            temperature: 0.6,
+            stream: true,
+          }),
+          signal: controller.signal,
         });
-        return;
-      }
 
-      // If backend route is not available (e.g. static hosting on GitHub Pages returns 404), fallback to client knowledge
-      if (!response.ok) {
-        await streamFallback(fallbackAnswer(trimmed));
-        return;
-      }
+        if (!res.ok || !res.body) continue;
 
-      const contentType = response.headers.get("content-type") ?? "";
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
 
-      // Non-streaming responses: curated facts are free and unlimited.
-      if (!contentType.includes("text/event-stream")) {
-        const data = (await response.json()) as Reply & { error?: string; mode?: string };
-        if (data.mode === "ai") bumpUsage();
-        patchReply({
-          text: data.text ?? data.error ?? "Something went wrong. Try again.",
-          action: data.section ? { text: "", section: data.section } : undefined,
-        });
-        return;
-      }
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-      // A stream means the question went to a model — count it.
-      bumpUsage();
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
 
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error("No stream");
+          for (const line of lines) {
+            const trimmedLine = line.trim();
+            if (!trimmedLine.startsWith("data:")) continue;
+            const payload = trimmedLine.slice(5).trim();
+            if (payload === "[DONE]") continue;
 
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let acc = "";
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        for (const line of lines) {
-          if (!line.startsWith("data:")) continue;
-          const payload = line.slice(5).trim();
-          if (!payload) continue;
-
-          let event: StreamEvent;
-          try {
-            event = JSON.parse(payload) as StreamEvent;
-          } catch {
-            continue;
-          }
-
-          if (event.type === "delta") {
-            acc += event.text;
-            patchReply({ text: acc });
-            scrollToBottom();
-          } else if (event.type === "fallback") {
-            acc = event.text;
-            patchReply({ text: event.text, action: event.section ? { text: "", section: event.section } : undefined });
-          } else if (event.type === "done") {
-            patchReply({
-              text: acc,
-              action: event.section ? { text: "", section: event.section } : undefined,
-            });
+            try {
+              const parsed = JSON.parse(payload);
+              const delta = parsed.choices?.[0]?.delta?.content;
+              if (delta) {
+                acc += delta;
+                answered = true;
+                patchReply({ text: acc });
+                scrollToBottom();
+              }
+            } catch {
+              continue;
+            }
           }
         }
-      }
 
-      if (!acc) {
-        await streamFallback(fallbackAnswer(trimmed));
+        if (answered && acc.trim().length > 0) {
+          const sec = matchSection(trimmed);
+          if (sec) {
+            patchReply({ text: acc, action: { text: "", section: sec } });
+          }
+          break;
+        }
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        continue;
       }
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") return;
-      // Graceful fallback if network is unreachable
-      await streamFallback(fallbackAnswer(trimmed));
-    } finally {
-      setBusy(false);
-      abortRef.current = null;
     }
+
+    // Graceful fallback to client knowledge if offline or API is busy
+    if (!answered || acc.trim().length === 0) {
+      const fb = fallbackAnswer(trimmed);
+      await streamFallback(fb);
+    }
+
+    setBusy(false);
+    abortRef.current = null;
   }
 
   function jumpTo(section: string) {

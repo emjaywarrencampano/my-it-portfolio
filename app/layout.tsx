@@ -29,7 +29,7 @@ const description =
   "IT Specialist in Ilagan, Isabela. Builds systems end-to-end — from ESP32 hardware to the web app that monitors it. Network and Security, certified by Certiport.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://warren2003819.github.io/my-it-portfolio"),
+  metadataBase: new URL("https://emjaywarrencampano.github.io/my-it-portfolio"),
   title: {
     default: title,
     template: `%s — ${profile.shortName}`,

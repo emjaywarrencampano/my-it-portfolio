@@ -14,7 +14,7 @@ export const profile = {
     "Network and Security specialist based in Ilagan, Isabela. I diagnose and fix machines, set up systems, and build simple web tools when the existing ones do not fit.",
   links: {
     linkedin: "", // add your profile URL
-    github: "https://github.com/Warren2003819",
+    github: "https://github.com/emjaywarrencampano",
   },
   meta: [
     { label: "Focus", value: "Network & Security" },

@@ -764,6 +764,63 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
+  // Language switch / English request
+  if (/speak.*english|can we.*english|english.*please|english.*only|talk.*in.*english/i.test(q)) {
+    return {
+      text: `Yes, absolutely! I can speak in English. Feel free to ask me anything about Emjay's web systems, capstone bus transit project (Track My Ride), Certiport certifications, or IT background!`,
+    };
+  }
+
+  // Best expressions / Describe Emjay
+  if (/best\s*exp+res+ions?|describe.*emjay|describe\s+him|how\s+would\s+you\s+describe/i.test(q)) {
+    return {
+      text: `The best expressions to describe Emjay are: "Full-Stack Web Systems Developer", "Hardware-to-Software Bridge", and "Versatile IT Specialist". He builds end-to-end web applications and has the rare ability to wire physical microcontrollers and sensors directly into his live web dashboards.`,
+      section: "#about",
+    };
+  }
+
+  // Bugs in the system / System status
+  if (/(\bany\b|\bano\b|\bmga\b)?\s*bugs?\b|any\s*errors?|system\s*glitch/i.test(q)) {
+    return {
+      text: `No critical bugs! The portfolio is statically exported with Next.js 15, Three.js 3D nodes, and client-side failover. If you do encounter any UI glitches on your browser, feel free to drop a note to Emjay at ${profile.email}!`,
+      section: "#contact",
+    };
+  }
+
+  // PHP stack inquiry
+  if (/\bphp\b|laravel|codeigniter/i.test(q)) {
+    return {
+      text: `Oo naman! Marunong at gumagawa si Emjay ng backend web systems gamit ang PHP at MySQL/SQL, bukod pa sa modern web frameworks tulad ng React, Next.js, at Python Flask.`,
+      section: "#about",
+    };
+  }
+
+  // Repetition complaints ("pa ulet ulet ka")
+  if (/pa\s*ul+et|paulit|paulit-ulit|repetitive|same\s*answer/i.test(q)) {
+    return {
+      text: `Pasensya na pre! Handa akong sumagot sa anumang partikular na katanungan mo. Pwede mo akong tanungin tungkol sa mga gawa niyang Web Systems, sa Track My Ride bus tracking capstone, o sa kanyang certifications sa Cybersecurity at Networking!`,
+    };
+  }
+
+  // What to do / Capabilities / Assistance
+  if (/ano.*(gagawin|maitutulong|magagawa|tulong)|what\s+can\s+you\s+do|how\s+to\s+use/i.test(q)) {
+    return {
+      text: `Nandito ako para sagutin ang mga tanong mo tungkol kay Emjay! Pwede mong itanong:
+1. "Anong mga web system ang nagawa niya?"
+2. "Ikwento mo ang Track My Ride capstone."
+3. "Anong Certiport certifications ang meron siya?"
+4. O pwede kitang i-redirect sa Contact section para ma-email mo siya diretso!`,
+    };
+  }
+
+  // English generic fallback for English questions
+  const isEnglishQuery = /^(what|how|why|can|is|are|tell|do|does|where|who|when)\b/i.test(q) || /\b(please|experience|projects|skills|about|work)\b/i.test(q);
+  if (isEnglishQuery) {
+    return {
+      text: `I'm here to assist you! Emjay is a Web Systems Developer & IT Specialist specializing in React, Next.js, Python/Flask, PHP, SQL, and hardware IoT integration (ESP32). Feel free to ask about his capstone project, Certiport credentials, or contact him directly at ${profile.email}.`,
+    };
+  }
+
   // Warm, human conversational response
   return {
     text: `Nandito ako para tulungan ka pre! Specialty ko ikwento ang mga gawa at kakayahan ni Emjay — karamihan ay mga Web Systems at software applications (React, Next.js, Python, PHP, SQL), bukod pa sa custom ESP32 IoT devices, hardware repairs, at certifications niya. May specific web project o tanong ka ba tungkol sa kanya? Pwede mo rin siyang kontakin diretso sa ${profile.email}!`,
@@ -838,6 +895,12 @@ const DIRECT_PATTERNS = [
   /^(what|which|tell me about|ano|anong)\b.*(experience|intern\w*|freelance|background)/i,
   /open to work|are you (open|available)|is he (open|available)|hiring|contact (him|emjay)|his email/i,
   /^(hi|hello|hey|kumusta)\b/i,
+  /speak.*english|can we.*english|english.*please|english.*only|talk.*in.*english/i,
+  /best\s*exp+res+ions?|describe.*emjay|describe\s+him|how\s+would\s+you\s+describe/i,
+  /(\bany\b|\bano\b|\bmga\b)?\s*bugs?\b|any\s*errors?|system\s*glitch/i,
+  /\bphp\b|laravel|codeigniter/i,
+  /pa\s*ul+et|paulit|paulit-ulit|repetitive|same\s*answer/i,
+  /ano.*(gagawin|maitutulong|magagawa|tulong)|what\s+can\s+you\s+do|how\s+to\s+use/i,
 ];
 
 /** Questions that deserve a written answer rather than a lookup. */
