@@ -137,7 +137,7 @@ export const about = {
     "I am finishing a degree in Information Technology with a Network and Security track, and I keep learning by building things — including the occasional experiment.",
   ],
   skills: [
-    { group: "Languages", items: ["Python", "C++", "JavaScript", "TypeScript"] },
+    { group: "Languages", items: ["Python", "C++", "Java", "JavaScript", "TypeScript"] },
     { group: "Web Technologies", items: ["HTML", "CSS", "React", "Next.js"] },
     { group: "Databases", items: ["SQL", "SQLite", "Firebase"] },
     {

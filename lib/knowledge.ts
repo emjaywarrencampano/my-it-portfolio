@@ -15,7 +15,7 @@ export function buildSystemPrompt() {
 
   const skills = about.skills.map((group) => `${group.group}: ${group.items.join(", ")}`).join("\n");
 
-  return `You are the personal assistant on ${profile.name}'s portfolio website. Answer questions about his background, education, work, skills, and availability.
+  return `You are the personal assistant on ${profile.name}'s portfolio website. Answer questions about his background, education, programming skills, development workflow, full systems, and availability.
 
 FACTS
 Name: ${profile.name}
@@ -33,25 +33,35 @@ EDUCATION & ALUMNI
 - High School / Secondary: Isabela School of Arts and Trades (ISAT, 2016–2022).
 - Elementary: San Isidro Elementary School, Amityville Elementary School, East Central School – Ilagan, South Central School – Ilagan (2010–2016).
 
-CUSTOM ESP32 HARDWARE, IOT DEVICES & WHAT EMJAY CAN BUILD
+PROGRAMMING LANGUAGES & TECHNICAL CAPABILITIES
+- Python: Codes in Python manually from scratch. Builds backend APIs (Flask, Socket.IO, SQLite), desktop applications (pywebview), and packages Python projects into standalone Windows .exe executables (via PyInstaller/pywebview) so end-users can run tools without having Python installed. Experienced with in-process media streaming (PyAV) and system automation scripts.
+- C++: Writes manual C++ code for microcontrollers (ESP32, Arduino) in Arduino IDE and VS Code. Implements FreeRTOS dual-core multitasking, hardware peripheral drivers (UART, SPI, I2C), 5V relay actuators, and EEPROM offline non-volatile memory caching.
+- Java: Solid foundational and practical experience in Java, object-oriented programming (OOP), data structures, and software development principles.
+- Web Development: JavaScript, TypeScript, HTML/CSS, React, Next.js, PHP, responsive layouts, client-server data flow.
+- Databases: SQL, SQLite, Firebase Realtime Database with structured schemas, queries, and role-based permissions.
+
+DEVELOPMENT WORKFLOW & PHILOSOPHY (VIBECODING WITH DEEP FOUNDATIONS)
+- Core Foundations: Emjay deeply understands computer science fundamentals, system design, networking, and security. He is fully capable of writing manual code line-by-line in Python, C++, Java, JavaScript, TypeScript, and SQL.
+- High-Speed Execution: He actively leverages modern developer tools and assistants (Claude Code, DeepSeek, Codex, Antigravity, OpenCode, Hermes) as force multipliers to speed up development ("vibecoding" with full technical understanding).
+- Total System Oversight: He uses tools to eliminate repetitive boilerplate and build full-featured systems fast, while personally reviewing, architecting, and verifying all code logic, edge cases, and security measures.
+
+FULL-STACK SYSTEM BUILDING & SECURITY EXPERTISE
+- Can he build an entire system end-to-end? YES! He builds complete systems from scratch:
+  1. Hardware layer: Custom ESP32/Arduino circuits, sensors (GPS, RFID), relay switches, step-down voltage regulators (LM2596 from 12V/24V to 5V/3.3V).
+  2. Firmware layer: C++ FreeRTOS dual-core task scheduling and offline EEPROM event logging.
+  3. Network layer: 4G LTE Wi-Fi modems, LAN WebSockets, or local servers.
+  4. Backend/Data layer: SQL, SQLite, and Firebase Realtime Database.
+  5. Frontend/Dashboard layer: Real-time web dashboards (React, Next.js, PHP, Leaflet, OSRM road snapping) and desktop applications.
+- Security Expertise: Holds Certiport IT Specialist certifications in Cybersecurity and Network Security. Implements hardware-level access controls (RFID driver authentication interlocking starter solenoids to physically stop unauthorized ignition), role-based permissions, hashed credentials, and remote device locking.
+
+CUSTOM ESP32 HARDWARE, IOT DEVICES & COMMISSIONS
 - Can clients/visitors commission or hire him to build a device or system? YES!
-- What he can design, build, and develop:
-  * Custom IoT Microcontroller Systems: ESP32 and Arduino boards programmed in C++ using Arduino IDE and VS Code.
-  * Vehicle & Asset Telemetry: Real-time GPS tracking (NEO-M8N GPS modules with high-gain weatherproof SMA roof antennas) sending live coordinates over 4G LTE Wi-Fi modems.
-  * Physical Access & Security Controls: RFID readers (RC522 at 13.56 MHz) for driver/personnel authentication paired with 5V relay modules that control automotive starter solenoids (preventing unauthorized engine ignition until a valid ID is scanned).
-  * Robust Firmware Architecture: FreeRTOS dual-core multitasking on ESP32 (one core dedicated to sensor/display polling, the other dedicated to wireless telemetry so the device never freezes).
-  * Offline Resilience & Data Logging: Local event caching to non-volatile EEPROM during cellular dead spots, auto-syncing to cloud databases when network reconnects.
-  * Electrical & Power Management: LM2596 DC-DC step-down buck converters converting vehicle 12V/24V battery power to stable 5V and 3.3V rails without draining the battery.
-  * Real-Time Web Dashboards & Mapping: Interactive web dashboards using Next.js/React, PHP, Firebase Realtime Database, Leaflet, OpenStreetMap, and OSRM (Open-Source Routing Machine) road snapping to calculate precise ETAs and route distances.
 - Inquiries for custom ESP32 devices, hardware prototypes, or systems development can be sent directly to ${profile.email}.
 
 COLLABORATIVE ACADEMIC PROJECTS — COMPUTER LABORATORY LAN MANAGEMENT SYSTEM
 - Overview: A Windows computer laboratory management platform developed for an academic setting (do not use any proprietary brand name).
 - Note: This is an academic peer project that Emjay assisted with and is technically familiar with.
-- Architecture & Skills:
-  * Teacher/Admin Desktop Console: Built with Python using Flask, Socket.IO, SQLite, and pywebview.
-  * Student Workstation Clients: Background client services for session monitoring, remote commands, and file distribution.
-  * Offline LAN Screen Streaming: In-process video capture (PyAV) delivering real-time H.264 screen previews at 1 FPS for all lab workstations and smooth live video on active PC inspection, running 100% offline across the school's local area network.
+- Architecture & Skills: Teacher/Admin console (Python, Flask, Socket.IO, SQLite, pywebview) and student workstation clients for session monitoring, remote commands, and offline LAN screen streaming (PyAV H.264 video at 1 FPS previews and smooth live view) running 100% offline.
 
 RESEARCH & CAPSTONE — ${work.title}
 - Title: Track My Ride: An Intelligent City Bus Tracking and Transit Management System for IPUTC
@@ -80,7 +90,8 @@ RULES
 - Do not use buzzwords or AI hype (say "assistant", "tools", "routing", never "LLM", "AGI", or "AI-powered").
 - Never use the proprietary name "CentraLab" — refer to it only as a "computer laboratory LAN management system" or "laboratory monitoring platform".
 - Only state facts listed above. If something is unknown, say you do not have that detail and point to ${profile.email}.
-- If someone asks where he graduated or studied, state Isabela State University – Ilagan Campus (BSIT Network and Security, Class of 2026).
+- If someone asks if he can code in Python, C++, Java, or build full systems/.exe files, enthusiastically confirm his skills with details from above.
+- If someone asks about vibecoding or using tools, explain that he has deep fundamental coding knowledge and uses modern assistants to build entire systems rapidly.
 - If someone asks if they can have a custom device made or hire him for ESP32/IoT hardware, confirm that he builds custom ESP32 hardware and IoT systems and invite them to reach out at ${profile.email}.
 - If the visitor asks to see a section, tell them which section to scroll to (Work, Certifications, Experience, About, or Contact).`;
 }
@@ -88,10 +99,10 @@ RULES
 type Reply = { text: string; section?: string };
 
 const SECTIONS: Array<{ id: string; label: string; pattern: RegExp }> = [
-  { id: "#work", label: "Work", pattern: /work|capstone|track|project|ride/i },
+  { id: "#work", label: "Work", pattern: /work|capstone|track|project|ride|system/i },
   { id: "#certifications", label: "Certifications", pattern: /cert|cyber|database|network/i },
   { id: "#experience", label: "Experience", pattern: /experience|intern|freelance|education|graduat|school|university/i },
-  { id: "#about", label: "About", pattern: /about|skills|who|device|esp32/i },
+  { id: "#about", label: "About", pattern: /about|skills|who|device|esp32|python|c\+\+|java|code|vibe/i },
   { id: "#contact", label: "Contact", pattern: /contact|email|hire|reach|available|pagawa|magpagawa/i },
 ];
 
@@ -104,6 +115,7 @@ export function matchSection(question: string) {
 export function fallbackAnswer(question: string): Reply {
   const q = question.toLowerCase();
 
+  // Navigation commands
   if (/tour|show me|navigate|take me to|go to.*section|scroll to|where is/i.test(q)) {
     const match = SECTIONS.find((section) => section.pattern.test(q));
     return {
@@ -123,6 +135,46 @@ export function fallbackAnswer(question: string): Reply {
     return {
       text: `He is graduating with a BS in Information Technology (BSIT) specializing in Network and Security from Isabela State University – Ilagan Campus (Class of 2026). He also attended Isabela School of Arts and Trades for secondary school (2016–2022).`,
       section: "#experience",
+    };
+  }
+
+  // Python skills, manual coding, and .exe packaging
+  if (/python|\.exe\b|executable|marunong.*python|code.*python|python.*code/i.test(q)) {
+    return {
+      text: `Yes, Emjay codes in Python manually from scratch. He builds backend APIs (Flask, Socket.IO, SQLite), desktop tools (pywebview), and packages Python apps into standalone Windows .exe executables so clients can run them without installing Python.`,
+      section: "#about",
+    };
+  }
+
+  // C++ skills & microcontrollers
+  if (/c\+\+|c plus plus|cpp|marunong.*c\+\+|code.*c\+\+/i.test(q)) {
+    return {
+      text: `Yes, Emjay writes manual C++ code for microcontrollers like the ESP32 and Arduino, implementing FreeRTOS dual-core firmware, hardware peripheral drivers (UART, SPI, I2C), and offline EEPROM caching.`,
+      section: "#about",
+    };
+  }
+
+  // Java experience
+  if (/\bjava\b|marunong.*java|code.*java/i.test(q)) {
+    return {
+      text: `Yes, Emjay has solid experience with Java, including object-oriented programming (OOP), data structures, and fundamental software engineering principles from his IT degree.`,
+      section: "#about",
+    };
+  }
+
+  // Vibecoding, development workflow, and AI tools philosophy
+  if (/vibe\s*cod|workflow|how.*(code|develop|build|program)|paano.*(mag-code|mag-develop|gumawa|develop)|gamit.*ai/i.test(q)) {
+    return {
+      text: `Emjay pairs deep fundamentals (manual coding in Python, C++, Java, JS/TS) with modern coding tools (Claude Code, DeepSeek, Codex, Antigravity) to accelerate development. He uses tools to build entire systems fast without compromising architecture, stability, or security.`,
+      section: "#about",
+    };
+  }
+
+  // Full-stack system development and security
+  if (/buong system|full system|end-to-end|security|cybersecurity|network security/i.test(q)) {
+    return {
+      text: `Emjay builds complete systems from scratch — physical ESP32 circuits and C++ firmware, up to databases and real-time web dashboards. He holds Certiport certifications in Cybersecurity and Network Security, implementing hardware RFID interlocks and role-based access control.`,
+      section: "#work",
     };
   }
 
@@ -200,7 +252,7 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   return {
-    text: `I can answer questions about his graduation from ISU Ilagan, capstone, three Certiport certifications, custom ESP32 hardware, and how to reach him at ${profile.email}.`,
+    text: `I can answer questions about his graduation from ISU Ilagan, manual coding in Python/C++/Java, capstone, Certiport certifications, custom ESP32 hardware, and how to reach him at ${profile.email}.`,
   };
 }
 
@@ -210,12 +262,17 @@ export function fallbackAnswer(question: string): Reply {
  */
 const DIRECT_PATTERNS = [
   /^(what|which|where|who|when|tell me about|saan)\b.*(graduat\w*|school|universi\w*|college|alumni|education|degree|\bisu\b|aral|study|studied)/i,
+  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(python|\.exe|executable)/i,
+  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(c\+\+|c plus plus|cpp)/i,
+  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(\bjava\b)/i,
+  /vibe\s*cod|how does he (code|build|develop)|paano siya mag/i,
+  /buong system|full system|end-to-end|security|cybersecurity/i,
   /^(what|which|where|who|when|tell me about|pwede|can|magkano|kaya|ano|anong)\b.*(magpagawa|pagawa|custom.*device|make.*device|build.*device|commission|hire.*device|\besp32\b|\besp 32\b|iot.*device|custom.*hardware|develop|kaya|gumawa|how can he help)/i,
   /^(what|which|where|who|when|tell me about|ano|anong)\b.*(kaya.*gawin|pwede.*gawin|can he (build|develop|make|do))/i,
   /^(what|which|where|who|when|tell me about)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
   /^(what|which|where|who|when|tell me about)\b.*(capstone|track my ride|project|rfid|\biot\b|research|thesis)/i,
   /^(what|which|where|who|when|tell me about)\b.*(laboratory|\blab\b|screen stream|lan management)/i,
-  /^(what|which|tell me about)\b.*(skill\w*|tech stack|hardware|windows|arduino|c\+\+|tool\w*|omniroute|hermes|opencode|openrouter)/i,
+  /^(what|which|tell me about)\b.*(skill\w*|tech stack|hardware|windows|arduino|tool\w*|omniroute|hermes|opencode|openrouter)/i,
   /^(what|which|tell me about)\b.*(experience|intern\w*|freelance|background)/i,
   /open to work|are you (open|available)|is he (open|available)|hiring|contact (him|emjay)|his email/i,
   /^(hi|hello|hey|kumusta)\b/i,

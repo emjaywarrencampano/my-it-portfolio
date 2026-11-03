@@ -4,6 +4,7 @@ type Logo = { file: string; color: string };
 const LOGOS: Record<string, Logo> = {
   Python: { file: "python", color: "#3776AB" },
   "C++": { file: "cplusplus", color: "#00599C" },
+  Java: { file: "java", color: "#ED8B00" },
   JavaScript: { file: "javascript", color: "#D6B800" },
   TypeScript: { file: "typescript", color: "#3178C6" },
   HTML: { file: "html5", color: "#E34F26" },
