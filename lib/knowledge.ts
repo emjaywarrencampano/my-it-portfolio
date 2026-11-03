@@ -55,7 +55,7 @@ FULL-STACK SYSTEM BUILDING & SECURITY EXPERTISE
 - Can he build an entire system end-to-end? YES! He builds complete systems from scratch:
   1. Hardware layer: Custom ESP32/Arduino circuits, sensors (GPS, RFID), relay switches, step-down voltage regulators (LM2596 from 12V/24V to 5V/3.3V).
   2. Firmware layer: C++ FreeRTOS dual-core task scheduling and offline EEPROM event logging.
-  3. Network layer: 4G LTE Wi-Fi modems, LAN WebSockets, or local servers.
+  3. Network layer: Wi-Fi modems, WebSockets, or local servers.
   4. Backend/Data layer: SQL, SQLite, and Firebase Realtime Database.
   5. Frontend/Dashboard layer: Real-time web dashboards (React, Next.js, PHP, Leaflet, OSRM road snapping) and desktop applications.
 - Security Expertise: Holds Certiport IT Specialist certifications in Cybersecurity and Network Security. Implements hardware-level access controls (RFID driver authentication interlocking starter solenoids to physically stop unauthorized ignition), role-based permissions, hashed credentials, and remote device locking.
@@ -74,7 +74,7 @@ RESEARCH & CAPSTONE — ${work.title}
 - Researchers: Emjay Warren P. Campano and Jastine Ann P. Marcelo (BSIT Network and Security, Isabela State University – Ilagan Campus, December 2025).
 - Partner Organization: Ilagan Public Utility Transport Cooperative (IPUTC).
 - Public Features: Real-time minibus GPS tracking, live commuter estimated arrival times (ETA), route line mapping via OSRM, RFID driver verification that authorizes vehicle ignition, offline event logging to EEPROM during network drops, and web management dashboards for fleet operations.
-- Quality Evaluation: Evaluated under ISO/IEC 25010 standards across administrators, drivers, passengers, and IT experts (general weighted mean: 4.21 / Strongly Agree, with IT experts rating it 4.88).
+- Outcome: Successfully defended and completed as their BSIT academic thesis research at Isabela State University.
 - Confidentiality: Live production database keys, server credentials, and internal vehicle starter schematics are private cooperative property; describe only public-facing features and research findings.
 
 DEVELOPMENT TOOLS & WORKFLOW
@@ -301,7 +301,7 @@ export function fallbackAnswer(question: string): Reply {
   // Capstone & Thesis - Track My Ride
   if (/track|capstone|project|ride|iot|iputc|thesis|research/.test(q)) {
     return {
-      text: `Track My Ride is his 2025 BSIT capstone for IPUTC at ISU Ilagan, co-developed with Jastine Ann Marcelo. It combines IoT hardware (RFID driver authentication and GPS tracking) with a real-time web dashboard for passenger ETAs and fleet security, evaluated at 4.21/5.0 under ISO 25010.`,
+      text: `Track My Ride is his 2025 BSIT capstone research for IPUTC at ISU Ilagan, co-developed with Jastine Ann Marcelo. It connects vehicle IoT hardware with a real-time web dashboard for live transit tracking, which they successfully defended and completed.`,
       section: "#work",
     };
   }
@@ -416,9 +416,9 @@ const DIRECT_PATTERNS = [
   /who are you|who is emjay|sino si emjay|sino ka/i,
   /^(what|which|where|who|when|tell me about|pwede|can|magkano|kaya|ano|anong)\b.*(magpagawa|pagawa|custom.*device|make.*device|build.*device|commission|hire.*device|\besp32\b|\besp 32\b|iot.*device|custom.*hardware|develop|kaya|gumawa|how can he help)/i,
   /^(what|which|where|who|when|tell me about|ano|anong)\b.*(kaya.*gawin|pwede.*gawin|can he (build|develop|make|do))/i,
-  /^(what|which|where|who|when|tell me about)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
-  /^(what|which|where|who|when|tell me about)\b.*(capstone|track my ride|project|rfid|\biot\b|research|thesis)/i,
-  /^(what|which|where|who|when|tell me about)\b.*(laboratory|\blab\b|screen stream|lan management)/i,
+  /^(what|which|where|who|when|tell me about|ano|anong)\b.*(certif\w*|certiport|cyber\w*|network security|database\w*)/i,
+  /^(what|which|where|who|when|tell me about|ano|anong)\b.*(capstone|track my ride|project|rfid|\biot\b|research|thesis)/i,
+  /^(what|which|where|who|when|tell me about|ano|anong)\b.*(laboratory|\blab\b|screen stream|lan management)/i,
   /^(what|which|tell me about|ano|anong)\b.*(skill\w*|tech stack|hardware|windows|arduino|tool\w*|omniroute|hermes|opencode|openrouter)/i,
   /^(what|which|tell me about|ano|anong)\b.*(experience|intern\w*|freelance|background)/i,
   /open to work|are you (open|available)|is he (open|available)|hiring|contact (him|emjay)|his email/i,
