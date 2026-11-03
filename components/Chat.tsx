@@ -24,9 +24,9 @@ const START: Message = {
   text: "Hi — I’m Emjay’s assistant. Ask me about his capstone, certifications, or experience. I can also take you to a section.",
 };
 
-/** Each visitor gets 10 written answers per day; quick facts are unlimited. */
-const DAILY_LIMIT = 10;
-const USAGE_KEY = "ewc-ai-usage";
+/** Each visitor gets generous written answers per day; quick facts are unlimited. */
+const DAILY_LIMIT = 50;
+const USAGE_KEY = "ewc-ai-usage-v2";
 
 type Usage = { date: string; count: number };
 
