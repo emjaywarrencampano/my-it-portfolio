@@ -235,6 +235,7 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
             patchReply({ text: acc });
             scrollToBottom();
           } else if (event.type === "fallback") {
+            acc = event.text;
             patchReply({ text: event.text, action: event.section ? { text: "", section: event.section } : undefined });
           } else if (event.type === "done") {
             patchReply({

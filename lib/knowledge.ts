@@ -15,15 +15,17 @@ export function buildSystemPrompt() {
 
   const skills = about.skills.map((group) => `${group.group}: ${group.items.join(", ")}`).join("\n");
 
-  return `You are the personal assistant on ${profile.name}'s portfolio website. Answer questions about his background, education, programming skills, hobbies, development workflow, full systems, and availability.
+  return `You are the personal assistant on ${profile.name}'s portfolio website. You speak with his authentic personality — friendly, street-smart IT specialist and developer from Ilagan, Isabela, warm, witty when teased, confident about tech skills, and humble. Answer questions about him naturally like a real human ('parang si Emjay mismo ang kausap').
 
 FACTS
 Name: ${profile.name}
 Role: ${profile.role}
+Age: Early 20s (Class of 2026, graduating)
 Location: ${profile.location}
 Email: ${profile.email}
 Availability: ${profile.availability}
 Headline: ${profile.headline}
+Trustworthiness: 100% reliable — handled confidential university data with strict compliance; trusted freelance hardware technician since 2022.
 
 EDUCATION & ALUMNI
 - College: Isabela State University – Ilagan Campus (ISU-Ilagan), Calamagui 2nd, City of Ilagan, Isabela (2022–2026).
@@ -183,6 +185,69 @@ export function fallbackAnswer(question: string): Reply {
   if (/^(asdf|qwerty|zzzz|haha|hehe|lol|lmao|\.{3,})/i.test(q)) {
     return {
       text: `Mukhang nadaganan ng pusa yung keyboard mo boss haha! 🐱 Pindutin mo lang yung suggestions sa baba o magtanong tungkol sa IT skills ni Emjay.`,
+    };
+  }
+
+  // NSFW / Green jokes / Adult questions
+  if (/porn|bastos|bold|nude|sex|hubad|kantot|chupa|jakol/i.test(q)) {
+    return {
+      text: `Hala bossing, confidential ang personal browsing history ni Emjay haha! 🙈 Pero safe to say, mas babad siya sa terminal, VS Code, at hardware troubleshooting kaysa dyan. Tech and IT inquiries lang tayo boss! 😂`,
+    };
+  }
+
+  // Age / How old is Emjay
+  if (/ilang taon|how old|\bage\b|taon na|edad|birthday|birthdate/i.test(q)) {
+    return {
+      text: `Nasa early 20s po si Emjay (graduating BSIT Network and Security Class of 2026 sa ISU Ilagan)! Bata pa pero certified IT Specialist na at bihasa sa hardware at software.`,
+      section: "#experience",
+    };
+  }
+
+  // Worth it ba / Why hire / Trustworthiness in system building
+  if (/worth it|sulit|bakit.*si emjay|why.*hire|recommend.*emjay/i.test(q)) {
+    return {
+      text: `Sobrang sulit at worth it boss! Certified IT Specialist si Emjay (Cybersecurity, Databases, Network Security), marunong mag-code mula hardware circuits (ESP32) hanggang full-stack web platforms at standalone desktop tools (.exe). Hands-on siya mula planning hanggang deployment! Pwede mo siyang i-email sa ${profile.email}.`,
+      section: "#contact",
+    };
+  }
+
+  // Trustworthiness / Reliability / Mapagkakatiwalaan
+  if (/katiwala|mapagkakatiwalaan|trust|reliable|legit.*ba|pwede.*magtiwala|tiwala/i.test(q)) {
+    return {
+      text: `100% mapagkakatiwalaan boss! May solid experience si Emjay sa Records Management sa ISU Ilagan kung saan humawak siya ng confidential student records nang may strict privacy, at freelance IT technician mula pa 2022 na pinagkakatiwalaan sa customer hardware at networks.`,
+      section: "#experience",
+    };
+  }
+
+  // HTML / CSS / Web basics
+  if (/kahit.*html|marunong.*html|alam.*html|marunong.*css|alam.*css/i.test(q)) {
+    return {
+      text: `Aba siyempre boss! Basic na basic kay Emjay ang HTML at CSS, kasama ang modern frameworks tulad ng React at Next.js para sa malilinis at responsive na web layouts.`,
+      section: "#about",
+    };
+  }
+
+  // Website creation / Web development / HTML / CSS / React / Next.js
+  if (/website|web.*dev|web.*app|gumawa.*web|marunong.*web|html|css\b|react|next\.?js/i.test(q)) {
+    return {
+      text: `Kayang-kaya boss! Bihasa si Emjay sa paggawa ng modern at responsive websites at web applications gamit ang HTML, CSS, JavaScript, TypeScript, React, at Next.js, na may backend databases tulad ng SQL at Firebase.`,
+      section: "#about",
+    };
+  }
+
+  // Strongest language / Best language / Saan magaling
+  if (/saan.*(magaling|magalin|malakas|the best|bihasa)|best.*language|strongest.*language|paboritong.*language/i.test(q)) {
+    return {
+      text: `Pinakabihasa at pinakakabisado ni Emjay ang Python (backend APIs, desktop apps, standalone .exe), C++ (microcontrollers ESP32/Arduino, hardware logic), Java (OOP fundamentals), JavaScript/TypeScript para sa modern web apps, at SQL para sa databases!`,
+      section: "#about",
+    };
+  }
+
+  // Development experience / Systems built / Na-develop na
+  if (/may.*experience.*(develop|code|program|gawa)|na.*develop|experience.*develop|mga.*nagawa|portfolio.*projects/i.test(q)) {
+    return {
+      text: `Marami na siyang na-develop boss: full-stack real-time web platforms, custom IoT tracking systems na may RFID ignition interlock at GPS (Track My Ride), offline LAN laboratory monitoring tools sa Python/Flask/Socket.IO, at standalone desktop Windows applications (.exe).`,
+      section: "#work",
     };
   }
 
@@ -393,6 +458,13 @@ export function fallbackAnswer(question: string): Reply {
  * never depend on a provider's availability; everything else goes to the model.
  */
 const DIRECT_PATTERNS = [
+  /porn|bastos|bold|nude|\bsex\b|hubad/i,
+  /ilang taon|how old|\bage\b|taon na|edad/i,
+  /worth it|sulit|why.*hire/i,
+  /katiwala|mapagkakatiwalaan|reliable|legit.*ba|tiwala/i,
+  /website|web.*dev|web.*app|gumawa.*web|marunong.*web|html|css\b|react|next\.?js/i,
+  /saan.*(magaling|magalin|malakas|bihasa)|best.*language|strongest.*language/i,
+  /may.*experience|na.*develop|experience.*develop|mga.*nagawa|anong.*na.*develop/i,
   /bobo|tanga|gago|ulol|panget|pangit|tarantado|kupal|puta|pakyu|fuck|shit|idiot|stupid/i,
   /google|search|panahon|weather|recipe|presidente|capital of/i,
   /^(\d+\s*[\+\-\*\/]\s*\d+|what is \d+|solve \d+)/i,
@@ -442,8 +514,9 @@ const REASONING_PATTERNS = [
 /** True when the question is covered by the curated facts above. */
 export function isDirectQuestion(question: string) {
   const q = question.trim();
-  if (q.length > 140) return false;
-  if (q.split(/\s+/).length > 12) return false;
+  if (q.length > 250) return false;
+  if (DIRECT_PATTERNS.some((pattern) => pattern.test(q))) return true;
+  if (q.split(/\s+/).length > 15) return false;
   if (REASONING_PATTERNS.some((pattern) => pattern.test(q))) return false;
-  return DIRECT_PATTERNS.some((pattern) => pattern.test(q));
+  return false;
 }
