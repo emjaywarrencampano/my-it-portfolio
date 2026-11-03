@@ -119,6 +119,17 @@ const SECTIONS: Array<{ id: string; label: string; pattern: RegExp }> = [
   { id: "#contact", label: "Contact", pattern: /contact|email|hire|reach|available|pagawa|magpagawa/i },
 ];
 
+/** Clean colloquial prefixes like 'men', 'pre', 'boss' so matching is clean and natural. */
+function cleanQuery(query: string): string {
+  return query
+    .toLowerCase()
+    .trim()
+    .replace(/^([!?.,\-_]+)/, "")
+    .replace(/^(men|pre|boss|bossing|bro|kuya|tol|pare|paps|chief)\b[\s,]*/i, "")
+    .replace(/^([!?.,\-_]+)/, "")
+    .trim();
+}
+
 /** Maps a visitor's question to the most relevant page section, if any. */
 export function matchSection(question: string) {
   return SECTIONS.find((section) => section.pattern.test(question))?.id;
@@ -126,7 +137,116 @@ export function matchSection(question: string) {
 
 /** Deterministic fallback used when no OPENROUTER_API_KEY is configured. */
 export function fallbackAnswer(question: string): Reply {
-  const q = question.toLowerCase();
+  const q = question.toLowerCase().trim();
+  const cq = cleanQuery(question);
+
+  // Departures / Farewells / Goodbye
+  if (
+    /^(bye|goodbye|paalam|babay|see you|catch you|talk later)\b|alis na (ako|ko)|sige.*(alis|pre|boss|bro)|cge.*(alis|pre|boss|bro)|bye na/i.test(
+      q
+    ) ||
+    /^(bye|goodbye|paalam|alis na|see you)/i.test(cq)
+  ) {
+    return {
+      text: `Sige pre, salamat sa pagbisita sa portfolio ni Emjay! Ingat lagi. Kung may kailangan ka, project collaboration, o custom device commission, email mo lang siya sa ${profile.email}. Catch you later! 👋`,
+      section: "#contact",
+    };
+  }
+
+  // Impressions of Emjay / What do you think of Emjay / Opinion
+  if (
+    /(anong?|ano|what|tell me).*(masasabi|masabi|tingin|opinion|say|impression).*(kay|about).*emjay|describe.*emjay|kilala.*emjay/i.test(
+      q
+    ) ||
+    /(masasabi|opinion|tingin).*(kay|about).*emjay/i.test(cq)
+  ) {
+    return {
+      text: `Solid yan si Emjay pre! Masipag, maaasahan, at kakaiba ang skill set kasi hawak niya pareho ang software at physical hardware. Hindi lang siya basta nagko-code — marunong mag-troubleshoot ng board-level electronics, mag-solder ng ESP32, mag-setup ng secure networks, at gumawa ng full-stack systems. Plus, napaka-street-smart at humble makisama!`,
+      section: "#about",
+    };
+  }
+
+  // How good is he at coding / Coding proficiency
+  if (
+    /(gaano|kamusta|kumusta|how).*(galing|kagalig|husay|mahusay|skilled|good).*(code|coding|mag-code|magcode|program)|gaano.*code/i.test(
+      q
+    ) ||
+    /(gaano|how).*(galing|kagalig|husay|good).*(code|program)/i.test(cq)
+  ) {
+    return {
+      text: `Bihasa at subok sa practical coding! Hindi lang puro copy-paste — marunong mag-code manually from scratch sa Python, C++, Java, JS/TS, at SQL. Nakagawa na siya ng complete systems tulad ng Track My Ride transit system na may live GPS at RFID ignition lock, at laboratory monitoring tools. Gamit din niya ang modern tools para mabilis mag-develop nang hindi nasasakripisyo ang security at architecture.`,
+      section: "#about",
+    };
+  }
+
+  // Hosting, VPS, cloud deployment
+  if (
+    /\b(hosting|host|deploy|deployment|cloud|vps|vercel|netlify|cpanel|server|servers)\b/i.test(q) ||
+    /\b(hosting|host|deploy|cloud|vps)\b/i.test(cq)
+  ) {
+    return {
+      text: `Oo naman! Sanay si Emjay mag-deploy at mag-host ng systems — sa cloud platforms tulad ng Vercel at Netlify para sa modern Next.js/React web apps, VPS (Virtual Private Servers), shared hosting gamit ang cPanel/Apache para sa PHP/SQL stacks, at pati local on-premise servers (LAN environments) para sa offline laboratory systems. Alam din niya ang reverse proxy setup at network routing.`,
+      section: "#about",
+    };
+  }
+
+  // How long has he been building systems / experience timeline
+  if (
+    /(gaano|ilang).*(tagal|taon).*(gumagawa|gawa|build|develop).*(system|systems|device|code)|tagal.*(system|experience)|years.*experience/i.test(
+      q
+    ) ||
+    /(tagal|taon).*(system|develop)/i.test(cq)
+  ) {
+    return {
+      text: `Simula 2022 pa siya active bilang freelance electronics at IT technician (lagpas 3 taon na!). Sa period na 'to, nakagawa at nakatulong na siya sa iba't ibang projects — mula sa micro-hardware devices, school systems, hanggang sa major BSIT Capstone research project niya (Track My Ride) para sa transport cooperative noong 2025.`,
+      section: "#experience",
+    };
+  }
+
+  // High school electronics foundation (ISAT)
+  if (
+    /(high school|isat|secondary).*(marunong|alam|electronics|tinkering|bago)|marunong.*electronics.*(high school|bata)/i.test(
+      q
+    ) ||
+    /(high school|isat).*(electronics)/i.test(cq)
+  ) {
+    return {
+      text: `Mismo! Sa Isabela School of Arts and Trades (ISAT, 2016–2022) pa lang noong Junior at Senior High School, doon na nahasa ang hilig at matibay na pundasyon ni Emjay sa electronics, wiring, at hardware troubleshooting bago pa siya pumasok sa BSIT Network & Security sa ISU Ilagan.`,
+      section: "#experience",
+    };
+  }
+
+  // Currently studying / learning / inaaral ngayon
+  if (
+    /(pinag-aaralan|pinagaaralan|inaaral|aaralan|learning|studying|exploring).*(pa\s*)?(ngayon|now)|currently learning|meron.*pinag.*aralan/i.test(
+      q
+    ) ||
+    /(aaralan|inaaral|learning).*(ngayon|now)/i.test(cq)
+  ) {
+    return {
+      text: `Palaging nag-a-upgrade si Emjay! Kasalukuyan niyang ine-explore ang advanced low-latency protocols, Rust para sa memory-safe systems programming, Three.js para sa interactive 3D web UI, at local model failover routing (OmniRoute) para sa scalable apps.`,
+      section: "#about",
+    };
+  }
+
+  // Android / Mobile apps & systems
+  if (/android|mobile.*(app|system)|cellphone.*system/i.test(q) || /android|mobile/i.test(cq)) {
+    return {
+      text: `Kayang-kaya boss! Bukod sa web dashboards at desktop tools, may karanasan si Emjay sa component-level mobile repairs at paggawa ng mobile-responsive systems na may real-time updates (tulad ng commuter web app para sa smartphones sa Track My Ride).`,
+      section: "#about",
+    };
+  }
+
+  // Compliments & praise
+  if (
+    /^(lupet|astig|galing|angas|solid|nice|cool|sheesh|grabe|wow|idol)\b/i.test(q) ||
+    /^(lupet|astig|galing|angas|solid|nice)/i.test(cq)
+  ) {
+    return {
+      text: `Salamat bossing! Pinaghirapan talaga ni Emjay yan mula hardware circuits hanggang malinis na code. Kung may project ka o gusto mo siyang i-hire, email mo lang siya sa ${profile.email}! 🚀`,
+      section: "#contact",
+    };
+  }
 
   // Navigation commands
   if (/tour|show me|navigate|take me to|go to.*section|scroll to|where is/i.test(q)) {
@@ -534,12 +654,24 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // Greeting
-  if (/^(hello|hi|hey|kumusta|magandang|good\s*(morning|afternoon|evening))\b/i.test(q)) {
+  if (/^(hello|hi|hey|kumusta|magandang|good\s*(morning|afternoon|evening))\b/i.test(q) || /^(hello|hi|hey|kumusta)\b/i.test(cq)) {
     return { text: "Kamusta! Ako ang assistant ni Emjay. Tanungin mo ako tungkol sa coding skills niya, capstone, Certiport certifications, gaming hobbies, o pagpapagawa ng custom devices!" };
   }
 
+  // Affirmations & Acknowledgements
+  if (
+    /^(sige|geh|cge|ok|okay|copy|noted|ayos|salamat|thanks|thank you)\b/i.test(q) ||
+    /^(sige|geh|cge|ok|okay|ayos|salamat|thanks)/i.test(cq)
+  ) {
+    return {
+      text: `Walang anuman pre! Nandito lang ako kung may tanong ka pa tungkol sa systems, coding, hardware, o certifications ni Emjay. Pwede mo rin siyang i-email diretso sa ${profile.email}. 🚀`,
+      section: "#contact",
+    };
+  }
+
+  // Warm, human conversational response
   return {
-    text: `Nandito lang ako para sagutin ang kahit anong tanong mo tungkol kay Emjay — coding (Python/C++/Java), capstone, certifications, custom ESP32 devices, o gaming hobbies! Pwede mo rin siyang i-email diretso sa ${profile.email}.`,
+    text: `Nandito ako para tulungan ka pre! Specialty ko ikwento ang mga gawa at kakayahan ni Emjay — mula coding (Python/C++/Java/Next.js), custom ESP32 IoT devices, hardware repairs, hanggang sa capstone transit research at Certiport certifications niya. May specific project o tanong ka ba tungkol sa kanya? Pwede mo rin siyang kontakin diretso sa ${profile.email}!`,
   };
 }
 
@@ -548,6 +680,16 @@ export function fallbackAnswer(question: string): Reply {
  * never depend on a provider's availability; everything else goes to the model.
  */
 const DIRECT_PATTERNS = [
+  /^(bye|goodbye|paalam|babay|see you|catch you|talk later)\b|alis na (ako|ko)|sige.*(alis|pre|boss|bro)|cge.*(alis|pre|boss|bro)|bye na/i,
+  /(anong?|ano|what|tell me).*(masasabi|masabi|tingin|opinion|say|impression).*(kay|about).*emjay|describe.*emjay|kilala.*emjay/i,
+  /(gaano|kamusta|kumusta|how).*(galing|kagalig|husay|mahusay|skilled|good).*(code|coding|mag-code|magcode|program)|gaano.*code/i,
+  /\b(hosting|host|deploy|deployment|cloud|vps|vercel|netlify|cpanel|server|servers)\b/i,
+  /(gaano|ilang).*(tagal|taon).*(gumagawa|gawa|build|develop).*(system|systems|device|code)|tagal.*(system|experience)|years.*experience/i,
+  /(high school|isat|secondary).*(marunong|alam|electronics|tinkering|bago)|marunong.*electronics.*(high school|bata)/i,
+  /(pinag-aaralan|pinagaaralan|inaaral|aaralan|learning|studying|exploring).*(pa\s*)?(ngayon|now)|currently learning|meron.*pinag.*aralan/i,
+  /android|mobile.*(app|system)|cellphone.*system/i,
+  /^(lupet|astig|galing|angas|solid|nice|cool|sheesh|grabe|wow|idol)\b/i,
+  /^(sige|geh|cge|ok|okay|copy|noted|ayos|salamat|thanks|thank you)\b/i,
   /tell me about yourself|introduce yourself|walk me through|pakilala|tell us about yourself/i,
   /why.*hire|bakit.*(ikaw|siya|dapat).*piliin|why should we choose|what makes you different|what value/i,
   /\bstrengths?\b|kalakasan|biggest strength|greatest strength|\bedge\b/i,
@@ -578,10 +720,10 @@ const DIRECT_PATTERNS = [
   /\brust\b/i,
   /three\.?js|3d|nodes|sphere/i,
   /^(what|which|where|who|when|tell me about|saan)\b.*(graduat\w*|school|universi\w*|college|alumni|education|degree|\bisu\b|aral|study|studied)/i,
-  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(python|\.exe|executable)/i,
-  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(c\+\+|c plus plus|cpp)/i,
-  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(\bjava\b)/i,
-  /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(code|coding|program|programmer|developer|software|computer)/i,
+  /(marunong|alam|kaya|can|does|knows? how to).*(python|\.exe|executable)/i,
+  /(marunong|alam|kaya|can|does|knows? how to).*(c\+\+|c plus plus|cpp)/i,
+  /(marunong|alam|kaya|can|does|knows? how to).*(\bjava\b)/i,
+  /(marunong|kaya|can he|does he|knows? how to).*(code|program)|marunong.*(mag-code|magcode)|(coding|programming).*(skill|kakayahan|experience)|programmer.*ba|developer.*ba/i,
   /hobby|hobbies|gaming|game|gamer|laro|hilig/i,
   /vibe\s*cod|how does he (code|build|develop)|paano siya mag/i,
   /buong system|full system|end-to-end|security|cybersecurity/i,
@@ -616,8 +758,9 @@ const REASONING_PATTERNS = [
 export function isDirectQuestion(question: string) {
   const q = question.trim();
   if (q.length > 250) return false;
-  if (DIRECT_PATTERNS.some((pattern) => pattern.test(q))) return true;
+  const cq = cleanQuery(q);
+  if (DIRECT_PATTERNS.some((pattern) => pattern.test(q) || pattern.test(cq))) return true;
   if (q.split(/\s+/).length > 15) return false;
-  if (REASONING_PATTERNS.some((pattern) => pattern.test(q))) return false;
+  if (REASONING_PATTERNS.some((pattern) => pattern.test(q) || pattern.test(cq))) return false;
   return false;
 }

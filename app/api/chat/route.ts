@@ -1,5 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
 import { NextResponse } from "next/server";
-import { OpenRouter } from "@openrouter/sdk";
 import { buildSystemPrompt, fallbackAnswer, isDirectQuestion, matchSection } from "@/lib/knowledge";
 
 export const runtime = "nodejs";
@@ -8,30 +9,53 @@ export const maxDuration = 30;
 const MAX_MESSAGES = 20;
 const MAX_CHARS = 1500;
 
-/**
- * Ordered model candidates. Free models share an upstream pool that is often
- * rate-limited, so we try several before giving up. `OPENROUTER_MODEL` accepts a
- * comma-separated list to override the chain.
- */
-const ENV_CHAIN = (process.env.OPENROUTER_MODEL ?? "")
-  .split(",")
-  .map((model) => model.trim())
-  .filter(Boolean);
+function getApiKey(): string | undefined {
+  try {
+    const envPath = path.join(process.cwd(), ".env.local");
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, "utf8").replace(/^\uFEFF/, "");
+      const match = content.match(/^OPENROUTER_API_KEY\s*=\s*(.+)$/m);
+      if (match && match[1]?.trim()) {
+        return match[1].trim();
+      }
+    }
+  } catch {
+    // Ignore error
+  }
+  return process.env.OPENROUTER_API_KEY?.trim();
+}
 
-const MODEL_CHAIN = (
-  ENV_CHAIN.length > 0
-    ? ENV_CHAIN
-    : [
-        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-        "google/gemma-4-26b-a4b-it:free",
-        "openrouter/free",
-      ]
-).slice(0, 4);
+function getModelChain(): string[] {
+  try {
+    const envPath = path.join(process.cwd(), ".env.local");
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, "utf8").replace(/^\uFEFF/, "");
+      const match = content.match(/^OPENROUTER_MODEL\s*=\s*(.+)$/m);
+      if (match && match[1]?.trim()) {
+        const list = match[1].split(",").map((m) => m.trim()).filter(Boolean);
+        if (list.length > 0) return list;
+      }
+    }
+  } catch {
+    // Ignore error
+  }
+  const fromEnv = (process.env.OPENROUTER_MODEL ?? "")
+    .split(",")
+    .map((m) => m.trim())
+    .filter(Boolean);
+  if (fromEnv.length > 0) return fromEnv;
+  return [
+    "nvidia/nemotron-3.5-super-vl:free",
+    "liquid/lfm-2.5-2.6b:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "openrouter/free",
+  ];
+}
 
 /** Very small in-memory limiter — good enough for a low-traffic portfolio. */
 const hits = new Map<string, { count: number; reset: number }>();
 const WINDOW_MS = 60_000;
-const LIMIT = 10;
+const LIMIT = 35;
 
 function rateLimited(ip: string) {
   const now = Date.now();
@@ -110,46 +134,84 @@ export async function POST(request: Request) {
     return NextResponse.json({ mode: "direct", ...fallbackAnswer(question) });
   }
 
-  const apiKey = process.env.OPENROUTER_API_KEY;
+  const apiKey = getApiKey();
+  const modelChain = getModelChain().slice(0, 4);
 
   if (!apiKey) {
     return NextResponse.json({ mode: "fallback", ...fallbackAnswer(question) });
   }
 
-  const client = new OpenRouter({ apiKey });
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       let answered = false;
 
-      for (const model of MODEL_CHAIN) {
+      for (const model of modelChain) {
         const started = Date.now();
         let yielded = false;
 
         try {
-          const completion = await client.chat.send({
-            chatRequest: {
+          const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+              "HTTP-Referer": "http://localhost:3000",
+              "X-Title": "Emjay Campano Portfolio",
+            },
+            body: JSON.stringify({
               model,
               messages: [{ role: "system", content: buildSystemPrompt() }, ...messages],
-              maxTokens: 400,
-              temperature: 0.3,
-              reasoning: { effort: "minimal" },
+              max_tokens: 800,
+              temperature: 0.5,
               stream: true,
-            },
+            }),
+            signal: AbortSignal.timeout(10000),
           });
 
-          for await (const chunk of completion) {
-            const delta = chunk.choices?.[0]?.delta?.content;
-            if (!delta) continue;
+          if (!res.ok) {
+            const errText = await res.text().catch(() => "");
+            console.warn(`[chat] model ${model} HTTP ${res.status}: ${errText}`);
+            continue;
+          }
 
-            if (!yielded) {
-              yielded = true;
-              answered = true;
-              controller.enqueue(encoder.encode(sse({ type: "meta", model })));
+          if (!res.body) continue;
+
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+
+            for (const line of lines) {
+              const trimmed = line.trim();
+              if (!trimmed.startsWith("data:")) continue;
+              const payload = trimmed.slice(5).trim();
+              if (payload === "[DONE]") continue;
+
+              try {
+                const parsed = JSON.parse(payload);
+                const delta = parsed.choices?.[0]?.delta?.content;
+                if (!delta) continue;
+
+                if (!yielded) {
+                  yielded = true;
+                  answered = true;
+                  controller.enqueue(encoder.encode(sse({ type: "meta", model })));
+                }
+
+                controller.enqueue(encoder.encode(sse({ type: "delta", text: delta })));
+              } catch {
+                continue;
+              }
             }
-
-            controller.enqueue(encoder.encode(sse({ type: "delta", text: delta })));
           }
 
           if (yielded) {
@@ -162,10 +224,7 @@ export async function POST(request: Request) {
 
           console.warn(`[chat] empty completion ${model} ${Date.now() - started}ms`);
         } catch (error) {
-          console.warn(
-            `[chat] model failed ${model} ${Date.now() - started}ms`,
-            error instanceof Error ? error.message : error,
-          );
+          console.warn(`[chat] model failed ${model} ${Date.now() - started}ms`, error instanceof Error ? error.message : error);
         }
       }
 
