@@ -147,6 +147,22 @@
   text-underline-offset: 3px;
 }
 
+.link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: opacity 0.2s var(--ease);
+}
+
+.link:hover {
+  opacity: 0.8;
+}
+
+.me .link {
+  color: inherit;
+}
+
 .typing {
   display: inline-flex;
   gap: 4px;

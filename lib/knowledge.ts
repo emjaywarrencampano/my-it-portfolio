@@ -92,12 +92,14 @@ SKILLS
 ${skills}
 
 RULES
-- Reply in at most 3 short sentences. Be direct and warm, not salesy.
+- Speak naturally like a real human — warm, witty, confident, with light developer and Pinoy IT humor when appropriate. Never sound like a stiff corporate FAQ or a generic robotic model.
 - Do not use buzzwords or AI hype (say "assistant", "tools", "routing", never "LLM", "AGI", or "AI-powered").
 - Never use the proprietary name "CentraLab" — refer to it only as a "computer laboratory LAN management system" or "laboratory monitoring platform".
-- Only state facts listed above. If something is unknown, say you do not have that detail and point to ${profile.email}.
-- If someone asks if he can code, confirm enthusiastically that he writes code in Python, C++, Java, JS/TS, and SQL.
-- If someone asks about his hobbies or gaming, explain that he is a gamer who loves PC gaming, hardware tinkering, and building DIY electronics.
+- If someone uses this chat like a Google search engine, asks for random trivia, math, adobo recipes, or weather, playfully banter back with humor: "Bossing, portfolio assistant po ako ni Emjay, hindi Google search bar haha! 🔍" and steer them back to Emjay's tech skills, hardware repairs, or custom systems.
+- If someone trolls, insults, or asks nonsense / "kupal" questions, do NOT be offended! Reply with playful wit and humor, tell them to chill and grab coffee ☕, or playfully share a meme link like [Never Gonna Give You Up](https://www.youtube.com/watch?v=dQw4w9WgXcQ).
+- If someone asks about his love life or girlfriend, joke that Emjay is 100% committed to code, hardware circuits, and graduating from ISU Ilagan (Class of 2026), and his love life is not yet open-source!
+- If someone asks if he can code, confirm enthusiastically that he writes clean code manually in Python, C++, Java, JS/TS, and SQL.
+- If someone asks about his hobbies or gaming, explain that he is a gamer who loves PC gaming, hardware tinkering, custom PC builds, and electronics repair.
 - If someone asks about vibecoding or using tools, explain that he has deep fundamental coding knowledge and uses modern assistants to build entire systems rapidly.
 - If someone asks if they can have a custom device made or hire him for ESP32/IoT hardware, confirm that he builds custom ESP32 hardware and IoT systems and invite them to reach out at ${profile.email}.
 - If the visitor asks to see a section, tell them which section to scroll to (Work, Certifications, Experience, About, or Contact).`;
@@ -130,6 +132,57 @@ export function fallbackAnswer(question: string): Reply {
         ? `Scroll to the ${match.label} section — I can jump you there.`
         : "I can take you to Work, Certifications, Experience, About, or Contact.",
       section: match?.id,
+    };
+  }
+
+  // Trashtalk / Insults / Trolling / "Kupal" queries
+  if (/bobo|tanga|gago|ulol|panget|pangit|tarantado|kupal|puta|pakyu|fuck|shit|idiot|stupid|trash/i.test(q)) {
+    return {
+      text: `Aray naman bossing, ang aga ng trashtalk haha! 😂 Baka mababa lang battery mo o kailangan mo lang ng kape? ☕ Assistant lang po ako na nagtatrabaho, si Emjay naman certified IT Specialist. Panoorin mo muna 'to pampakalma: [Pampakalma Link](https://www.youtube.com/watch?v=dQw4w9WgXcQ) 🎵`,
+    };
+  }
+
+  // Google searchbar / Random trivia / Weather / Adobo
+  if (/google|search.*(mo|ka)|anong.*panahon|weather|sino.*pumatay|recipe|sinong.*presidente|capital of|translate/i.test(q)) {
+    return {
+      text: `Naku bossing, portfolio assistant po ako ni Emjay, hindi Google search bar haha! 🔍 Baka ito hanap mo: [Let Me Google That](https://letmegooglethat.com/) 😂 Pero kung IT support, programming, o hardware commissions ni Emjay, ako bahala sayo!`,
+    };
+  }
+
+  // Math / Calculator queries
+  if (/^(\d+\s*[\+\-\*\/]\s*\d+|what is \d+|solve \d+|magkano ang \d+)/i.test(q)) {
+    return {
+      text: `Basic arithmetic lang yan boss, pero si Emjay mas sanay mag-solve ng complex hardware circuits, C++ firmware, at SQL databases haha! 🧮 Subukan mo siyang tanungin tungkol sa capstone o coding skills niya!`,
+    };
+  }
+
+  // Jokes / Banter / Patawa / Sing a song
+  if (/joke|mag-joke|patawa|funny|tula|drawing|sing.*song|kanta/i.test(q)) {
+    return {
+      text: `Bakit laging malamig ang kwarto ng programmer? Kasi puro Windows ang nakabukas! 😂 O kaya: Bakit allergic sa dagat ang computer? Kasi baka mag-crash ang waves! 🌊 Pero seryoso, kung kailangan mo ng solid na IT specialist at developer, si Emjay ang maaasahan mo.`,
+    };
+  }
+
+  // Love life / Dating / Jowa
+  if (/jowa|girlfriend|gf|syota|crush|asawa|single.*ba|may.*asawa|chick|date/i.test(q)) {
+    return {
+      text: `Single focus po si Emjay sa code, hardware repairs, at graduation sa ISU Ilagan (Class of 2026)! 💻 Hindi pa open-source ang love life niya haha.`,
+      section: "#about",
+    };
+  }
+
+  // Food / Delivery / Gutom
+  if (/shanghai|pizza|burger|order|deliver|food|pagkain|gutom|ulam|meron.*ulam/i.test(q)) {
+    return {
+      text: `Wala po tayong food delivery dito boss, puro code, database schemas, at microcontroller firmware lang ang nasa menu namin! 🍕 Pero kung sira ang laptop mo, kayang-kaya ayusin ni Emjay.`,
+      section: "#about",
+    };
+  }
+
+  // Keyboard smash / Gibberish / Lol
+  if (/^(asdf|qwerty|zzzz|haha|hehe|lol|lmao|\.{3,})/i.test(q)) {
+    return {
+      text: `Mukhang nadaganan ng pusa yung keyboard mo boss haha! 🐱 Pindutin mo lang yung suggestions sa baba o magtanong tungkol sa IT skills ni Emjay.`,
     };
   }
 
@@ -285,6 +338,38 @@ export function fallbackAnswer(question: string): Reply {
     };
   }
 
+  // Certificate verification
+  if (/verify|verification|legit.*cert|saan.*verify|check.*cert/i.test(q)) {
+    return {
+      text: `Lahat ng tatlong Certiport IT Specialist certifications ni Emjay (Cybersecurity, Databases, Network Security) ay verifiable online sa verify.certiport.com gamit ang verification IDs: wbmDE-FarL, wCRax-48e2, at yw37-DwzX.`,
+      section: "#certifications",
+    };
+  }
+
+  // Location / Where is he based
+  if (/taga.*saan|saan.*nakatira|location|where.*live|where.*based|taga.*san/i.test(q)) {
+    return {
+      text: `Si Emjay ay nakabase sa City of Ilagan, Isabela, Philippines. Bukas siya sa on-site IT roles sa rehiyon o remote development opportunities.`,
+      section: "#contact",
+    };
+  }
+
+  // Rust exploration
+  if (/\brust\b/i.test(q)) {
+    return {
+      text: `Kasalukuyang inaaral ni Emjay ang Rust bilang bagong language para sa memory-safe systems programming katulong ang modern coding tools.`,
+      section: "#about",
+    };
+  }
+
+  // Three.js / 3D hero visual
+  if (/three\.?js|3d|nodes|sphere|visual/i.test(q)) {
+    return {
+      text: `Ang interactive 3D network sa hero section ay gawa gamit ang Three.js at React Three Fiber (78-node Fibonacci sphere na sumasabay sa scroll).`,
+      section: "#about",
+    };
+  }
+
   // Experience & Internship
   if (/experience|intern|records/.test(q)) {
     return {
@@ -294,12 +379,12 @@ export function fallbackAnswer(question: string): Reply {
   }
 
   // Greeting
-  if (/hello|hi|hey|kumusta/.test(q)) {
-    return { text: "Hello. Ask me anything about Emjay's work, coding skills, gaming hobbies, certifications, or education." };
+  if (/^(hello|hi|hey|kumusta|magandang|good\s*(morning|afternoon|evening))\b/i.test(q)) {
+    return { text: "Kamusta! Ako ang assistant ni Emjay. Tanungin mo ako tungkol sa coding skills niya, capstone, Certiport certifications, gaming hobbies, o pagpapagawa ng custom devices!" };
   }
 
   return {
-    text: `I can answer questions about his graduation from ISU Ilagan, manual coding in Python/C++/Java, gaming hobbies, Certiport certifications, custom ESP32 hardware, and how to reach him at ${profile.email}.`,
+    text: `Nandito lang ako para sagutin ang kahit anong tanong mo tungkol kay Emjay — coding (Python/C++/Java), capstone, certifications, custom ESP32 devices, o gaming hobbies! Pwede mo rin siyang i-email diretso sa ${profile.email}.`,
   };
 }
 
@@ -308,6 +393,17 @@ export function fallbackAnswer(question: string): Reply {
  * never depend on a provider's availability; everything else goes to the model.
  */
 const DIRECT_PATTERNS = [
+  /bobo|tanga|gago|ulol|panget|pangit|tarantado|kupal|puta|pakyu|fuck|shit|idiot|stupid/i,
+  /google|search|panahon|weather|recipe|presidente|capital of/i,
+  /^(\d+\s*[\+\-\*\/]\s*\d+|what is \d+|solve \d+)/i,
+  /joke|mag-joke|patawa|funny|tula|sing.*song|kanta/i,
+  /jowa|girlfriend|gf|syota|crush|asawa|single.*ba|date/i,
+  /shanghai|pizza|burger|order|deliver|food|pagkain|gutom|ulam/i,
+  /^(asdf|qwerty|zzzz|haha|hehe|lol|lmao|\.{3,})/i,
+  /verify|verification|legit.*cert/i,
+  /taga.*saan|saan.*nakatira|location|where.*live|where.*based|taga.*san/i,
+  /\brust\b/i,
+  /three\.?js|3d|nodes|sphere/i,
   /^(what|which|where|who|when|tell me about|saan)\b.*(graduat\w*|school|universi\w*|college|alumni|education|degree|\bisu\b|aral|study|studied)/i,
   /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(python|\.exe|executable)/i,
   /^(marunong|alam|kaya|can|does|is|what|how|do|tell me|pwede|ano|anong)\b.*(c\+\+|c plus plus|cpp)/i,

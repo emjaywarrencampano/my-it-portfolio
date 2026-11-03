@@ -54,6 +54,51 @@ function writeUsage(usage: Usage) {
   }
 }
 
+function renderMessageText(text: string) {
+  const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s]+)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    if (match[1] && match[2]) {
+      parts.push(
+        <a
+          key={match.index}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.link}
+        >
+          {match[1]}
+        </a>
+      );
+    } else if (match[3]) {
+      parts.push(
+        <a
+          key={match.index}
+          href={match[3]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.link}
+        >
+          {match[3]}
+        </a>
+      );
+    }
+    lastIndex = linkRegex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
+}
+
 export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [messages, setMessages] = useState<Message[]>([START]);
   const [input, setInput] = useState("");
@@ -261,7 +306,7 @@ export function Chat({ open, onClose }: { open: boolean; onClose: () => void }) 
 
           return (
             <div key={message.id} className={`${styles.msg} ${message.role === "user" ? styles.me : styles.bot}`}>
-              {message.text}
+              {renderMessageText(message.text)}
               {message.action?.section && !busy && (
                 <button type="button" className={styles.jump} onClick={() => jumpTo(message.action!.section!)}>
                   → Jump to section
