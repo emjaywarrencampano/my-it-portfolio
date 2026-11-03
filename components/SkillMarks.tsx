@@ -7,6 +7,7 @@ const LOGOS: Record<string, Logo> = {
   Python: { file: "python", color: "#3776AB" },
   "C++": { file: "cplusplus", color: "#00599C" },
   Java: { file: "java", color: "#ED8B00" },
+  PHP: { file: "php", color: "#777BB4" },
   JavaScript: { file: "javascript", color: "#D6B800" },
   TypeScript: { file: "typescript", color: "#3178C6" },
   HTML: { file: "html5", color: "#E34F26" },

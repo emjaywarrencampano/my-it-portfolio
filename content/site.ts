@@ -138,7 +138,7 @@ export const about = {
     "When away from the terminal, I spend my time PC gaming, tinkering with microcontrollers, or tuning and repairing custom hardware.",
   ],
   skills: [
-    { group: "Languages", items: ["Python", "C++", "Java", "JavaScript", "TypeScript"] },
+    { group: "Languages", items: ["Python", "C++", "Java", "PHP", "JavaScript", "TypeScript"] },
     { group: "Web Technologies", items: ["HTML", "CSS", "React", "Next.js"] },
     { group: "Databases", items: ["SQL", "SQLite", "Firebase"] },
     {
